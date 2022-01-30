@@ -25,7 +25,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*', 'https://706b45d3d7b5.ngrok.io', '706b45d3d7b5.ngrok.io']
+ALLOWED_HOSTS = ['https://www.edu-nsdcindia.org/', 'www.edu-nsdcindia.org']
 
 
 # Application definition
@@ -74,23 +74,22 @@ WSGI_APPLICATION = 'skill_india.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'skill_bharat',
-#         'USER': 'root',
-#         'PASSWORD': '12345',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'skill-india-2022',
+        'USER': 'skillindia',
+        'PASSWORD': '@Eduskill2022',
+        'HOST': 'skillindia.mysql.pythonanywhere-services.com'
+    }
+}
 
 
 # Password validation
