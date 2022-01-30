@@ -1,0 +1,890 @@
+{% extends 'template/index.html' %}
+{% load static %}
+{% block body %}
+<style>
+    .contain {
+	
+	overflow-x: auto;
+	white-space: nowrap;
+    }
+    a{
+            color:rgb(255, 255, 255);
+            text-decoration: none;
+        }
+        .apple a{
+            color:rgb(255, 255, 255);
+            text-decoration: none;
+        }
+        a:hover{
+            color:rgb(255, 255, 255);
+            text-decoration: none;
+        }
+    div.Header{
+        border-left: 5px solid white;
+        height: 30px;
+    }
+</style>
+    <div class="container-fluid">
+        <div class="row align-content-center" style="background-color: #4572d4; color: white; ">
+            <div class="col-md-6 text-center" >
+            <h4 style="font-size:18px;"> Welcome {{request.user.registration_set.all.0.name|title}} </h4> </div> 
+            <div class="col-md-6" style="text-align:center; padding-top:5px;" > <h6> <a href="/change-password/" style="color: white; padding-top: 20;"> Change Password </a> &nbsp; &nbsp; <a href="/logout/" style="color: white;"> - Log Out</a> </h6> </div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
+        <div class="row">
+            <div class="row text-center" style="background-color: #394B71;  color: white; ">
+            <div class="col-md-3 Header" style="padding-top: 5px;"><a href="{% url 'candidate' %}" style="color: white;">Latest Notification</a></div>
+            <div class="col-md-3 Header" style="padding-top: 5px;"><a href="{% url 'candidate-history' %}" style="color: white;">Application History</a></div>
+            <div class="col-md-3 Header active" style="background-color:#116738; padding-top: 5px;" ><a href="{% url 'register' %}" style="color: white;">Modify Registration</a></div>
+            <div class="col-md-3 Header" style="padding-top: 5px;"><a href="{% url 'candidate-marks' %}" style="color: white;">Results/Marks</a></div>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="text-uppercase" style="text-align: center; background-color: #4572d4; margin-top: 7px; padding-bottom: 10px; color: white; padding-top: 10px;">
+                {{job.job_name}},{{job.job_year}}
+            </div>
+        </div>
+
+
+       
+        <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="job" value="{{job.id}}">
+        <div class="registration-formFields">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div id="printarea">
+                    
+                    <div class="regFieldStructure regFieldActiveStep">
+                        <h2 style="text-align: center; margin-bottom: 0; background-color: #394B71;">Instructions</h2>
+                        
+                            <div class="text-uppercase text-danger" style="text-align: center; background-color: wheat;  padding-top: 10px; padding-bottom: 10px;"><b> Please be very careful while filling the application form </b></div>
+                       
+                        <div class="col-sm-10 col-sm-offset-1">
+                            
+                            <div class="form-group mt-4">
+                                <label class="col-sm-5" id="lblAadharSupp">1. Candidate's Name (As per the Matriculation Certificate):</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 7px;">
+                                        <input class="form-control text-uppercase" id="Name" maxlength="60" name="Name" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.name}}" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5" id="lblAadharSupp">2. New / Changed Name: </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <input class="form-control text-uppercase" id="Name" maxlength="60" name="change_name" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.change_name}}" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5" id="lblAadharSupp">3. Father's Name:</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <input class="form-control text-uppercase" id="Name" maxlength="60" name="father_name" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.father_name}}" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5" id="lblAadharSupp">4. Mother's Name:</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <input class="form-control text-uppercase" id="Name" maxlength="60" name="mother_name" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.mother_name}}" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">5. Date of Birth (DD/MM/YYYY) (Date of Birth should be same as mentioned in Matriculation Certificate):</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <div class="forcalenderimg">
+                                            <input class="form-control" id="DateOfBirth" maxlength="10" name="dob" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="text" value="{{register.dob}}" readonly />   
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">6. Age as on Date of Birth: </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <div class="forcalenderimg">
+                                            <input class="form-control" id="DateOfBirth" maxlength="10" name="DateOfBirth" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="text" value="{{age}}" readonly/>   
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5" id="lblAadharSupp">7. Gender:</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <input class="form-control text-uppercase" id="Name" maxlength="60" name="gender" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.get_gender_display}}" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5" id="lblAadharSupp">8. Category:</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <input class="form-control text-uppercase" id="Name" maxlength="60" name="category" onkeypress="return validNameForRegistration(event);" type="text" value="{{addtion.category}}" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5" id="lblAadharSupp">9. Whether Person with Disability (PwD)?</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <input class="form-control text-uppercase" id="Name" maxlength="60" name="Name" onkeypress="return validNameForRegistration(event);" type="text" value="{% if addtion.is_disability %}Yes{% else %}No{% endif %}" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5" id="lblAadharSupp">9.1 If Yes. Type of Disability:</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <input class="form-control text-uppercase" id="Name" maxlength="60" name="type_disability" onkeypress="return validNameForRegistration(event);" type="text" value="{{addtion.get_type_disability_display}}" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5" id="lblAadharSupp">10. Nationality</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <input class="form-control text-uppercase" id="Name" maxlength="60" name="nationality" onkeypress="return validNameForRegistration(event);" type="text" value="{{addtion.get_nationality_display}}" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5" id="lblAadharSupp">11. Mark of Visible Identification</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <input class="form-control text-uppercase" id="Name" maxlength="60" name="indent_mark" onkeypress="return validNameForRegistration(event);" type="text" value="{{addtion.indent_mark}}" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5" id="lblAadharSupp">12. Matriculation (10 <sup style="color: black;">th</sup> Class) Examination Board:</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <input class="form-control text-uppercase" id="Name" maxlength="60" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.get_education_board_display}}" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">13. Matriculation (10 <sup style="color: black;">th</sup> Class) Roll No.: </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <div class="forcalenderimg">
+                                            <input class="form-control" id="DateOfBirth" maxlength="10" name="roll_number" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="text" value="{{register.roll_number}}" readonly />   
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">14. Matriculation (10<sup style="color: black;">th</sup> Class) Year of Passing: </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <div class="forcalenderimg">
+                                            <input class="form-control" id="DateOfBirth" maxlength="4" name="passing_year" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="text" value="{{register.get_passing_year_display}}" readonly/>   
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                
+                                
+                                <label class="col-sm-5 pmtallocated" id="TypeofIDsupp">15. Prefrence of Examination Center:  <sup>&#9733;</sup></label>
+                                <div class="col-sm-2 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <select class="custom-select" name="center1" id="center1" required><option value="">--Select--</option>
+                                            {% for m in centers1 %}
+                                        <option value="{{m.0}}" {% if m.0 == register.center1 %}selected {% endif %}>{{m.1}}</option>
+                                        {% endfor %}
+                                          </select>
+                                    </div>
+                                </div> &nbsp;  &nbsp;
+                                <div class="col-sm-2 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <select class="custom-select" name="center2" id="center2"><option value="">--Select--</option>
+                                            {% for l in centers2 %}
+                                        <option value="{{l.0}}" {% if l.0 == register.center2 %}selected {% endif %}>{{l.1}}</option>
+                                        {% endfor %}
+                                          </select>
+                                    </div>
+                                </div>  &nbsp;  &nbsp;
+                                <div class="col-sm-2 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <select class="custom-select" name="center3" id="center3"><option value="">--Select--</option>
+                                            {% for n in centers3 %}
+                                        <option value="{{n.0}}" {% if n.0 == register.center3 %}selected {% endif %}>{{n.1}}</option>
+                                        {% endfor %}
+                                          </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                
+                                <label class="col-sm-5 pmtallocated" id="TypeofIDsupp">16. Medium for Typing Test: <sup>&#9733;</sup></label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <select class="custom-select" name="test_meduim" id="testmeduim1">
+                                            <option selected value="">--Please Select--</option>
+                                            <option value="English">English</option>
+                                            <option value="Hindi">Hindi</option>
+                                          </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                
+                                <label class="col-sm-5 pmtallocated" id="TypeofIDsupp"> <b style="color:orange"> Confirm medium for Typing test:</b>  </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <select class="custom-select" name="test_meduim" id="testmeduim2">
+                                            <option selected value="">--Please Select--</option>
+                                            <option value="English">English</option>
+                                            <option value="Hindi">Hindi</option>
+                                          </select>
+                                          <label class="error-message" id="testmeduim3"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">17. Whether 12th standard pass in Science Stream with Mathematics as a subject from a recognized Board or equivalent (for DEO in the office of C&AG)<sup>&#9733;</sup></label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 13px;">
+                                        <span>
+                                            <input id="rbYes" name="science_student" type="radio" value="True" />
+                                            <label for="rbYes">Yes</label>
+                                        </span>
+                                        <span>
+                                            <input id="rbNo" name="science_student" type="radio" checked=True value="False" />
+                                            <label for="rbNo">No</label>
+                                        </span>
+                                        <label class="error-message" id="lblerrorGender"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">18. Whether Ex-Serviceman (ESM)? <sup>&#9733;</sup></label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 13px;">
+                                        <span>
+                                            <input id="Serviceman1" name="ex_Serviceman" type="radio" value="True" />
+                                            <label for="rbYes">Yes</label>
+                                        </span>
+                                        <span>
+                                            <input id="Serviceman2" name="ex_Serviceman" type="radio" checked=True value="False" />
+                                            <label for="rbNo">No</label>
+                                        </span>
+                                        <label class="error-message" id="lblerrorGender"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">18.1 Date of Discharge from Armed Forces (DD/MM/YYYY): </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <div class="forcalenderimg">
+                                            <input class="form-control" id="Serviceman3" disabled maxlength="10" name="discharge_ex_serviceman" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="date" value="" />   
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">18.2 Length of Service in the Armed Forces (in years): </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <div class="forcalenderimg">
+                                            <input class="form-control" id="Serviceman4" disabled maxlength="5" name="service_inyears" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="text" value="" />   
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">18.3 Have you already joined a civil post by availing benefit of reservation for Ex-Serviceman (ESM):   <sup>&#9733;</sup>
+                                </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 13px; padding-left: 5px;">
+                                        <span>
+                                            <input id="join1" name="join_civil" type="radio" value="True" />
+                                            <label for="rbYes">Yes</label>
+                                        </span>
+                                        <span>
+                                            <input id="join2" name="join_civil" type="radio" checked=True value="False" />
+                                            <label for="rbNo">No</label>
+                                        </span>
+                                        <label class="error-message" id="lblerrorGender"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">18.4 Date of Joining the Civil Post (DD/MM/YYYY): </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <div class="forcalenderimg">
+                                            <input class="form-control" id="join_date" disabled maxlength="10" name="date_join_civil" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="date" value="" />   
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">19.1 Whether suffering from Cerebral-Palsy </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 13px;">
+                                        <span>
+                                            <input id="rbYes" name="suffering_cerebral_palsy" type="radio" value="True" />
+                                            <label for="rbYes">Yes</label>
+                                        </span>
+                                        <span>
+                                            <input id="rbNo" name="suffering_cerebral_palsy" checked=True type="radio" value="False" />
+                                            <label for="rbNo">No</label>
+                                        </span>
+                                        <label class="error-message" id="lblerrorGender"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">19.2 Do you have a physical limitation to write and Scribe is required to write on your behalf (Certificate to this effect from the Chief Medical Officer/Civil Surgeon/ Medical Superintendent of a Government Health Care Institution as per Notice of the Examination. Would be required at the time of Examination)?   </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 13px;">
+                                        <span>
+                                            <input id="rbYes" name="provide_exam_help" type="radio" value="True" />
+                                            <label for="rbYes">Yes</label>
+                                        </span>
+                                        <span>
+                                            <input id="rbNo" name="provide_exam_help" type="radio" checked=True value="False" />
+                                            <label for="rbNo">No</label>
+                                        </span>
+                                        <label class="error-message" id="lblerrorGender"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">19.3 Whether scribe is required?
+                                </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 13px;">
+                                        <span>
+                                            <input id="rbYes" name="scribe_required" type="radio" value="True" />
+                                            <label for="rbYes">Yes</label>
+                                        </span>
+                                        <span>
+                                            <input id="rbNo" name="scribe_required" type="radio" checked=True value="False" />
+                                            <label for="rbNo">No</label>
+                                        </span>
+                                        <label class="error-message" id="lblerrorGender"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">19.4 Will you make your own arrangement of Scribe? </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 13px;">
+                                        <span>
+                                            <input id="rbYes" name="arrangement_own_scribe" type="radio" value="True" />
+                                            <label for="rbYes">Yes</label>
+                                        </span>
+                                        <span>
+                                            <input id="rbNo" name="arrangement_own_scribe" type="radio" checked=True value="False" />
+                                            <label for="rbNo">No</label>
+                                        </span>
+                                        <label class="error-message" id="lblerrorGender"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
+                                
+                                <label class="col-sm-5 pmtallocated" id="TypeofIDsupp">19.5 If Scribe is to be arranged by SSC, then indicate medium:</label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <select class="custom-select" name="arranged_by" id="inputGroupSelect01">
+                                            <option selected>--Please Select--</option>
+                                            <option value="12th standard">12th standard</option>
+                                            <option value="12th standard or equivalent">12th standard or equivalent</option>
+                                          </select>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">20 Whether seeking Age Relaxation  <sup>&#9733;</sup></label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 13px;">
+                                        <span>
+                                            <input id="age1" name="age_relaxation" type="radio" value="True" />
+                                            <label for="rbYes">Yes</label>
+                                        </span>
+                                        <span>
+                                            <input id="age2" name="age_relaxation" checked=True type="radio" value="False" />
+                                            <label for="rbNo">No</label>
+                                        </span>
+                                        <label class="error-message" id="lblerrorGender"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                
+                                <label class="col-sm-5 pmtallocated" id="TypeofIDsupp">20.1 If Yes. Age Relaxation code:
+                                </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <select class="custom-select" name="age_relaxation_code" id="age3" disabled><option value="">--Select--</option>
+                                            {% for o in age_relaxation_code %}
+                                        <option value="{{o.0}}" {% if o.0 == register.age_relaxation %}selected {% endif %}>{{o.1}}</option>
+                                        {% endfor %}
+                                          </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                
+                                <label class="col-sm-5 pmtallocated" id="TypeofIDsupp">21. Highest Qualification: <sup>&#9733;</sup></label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <select class="custom-select" name="highest_qualification" id="inputGroupSelect01"><option value="">--Select--</option>
+                                            {% for p in highest_qualification %}
+                                        <option value="{{p.0}}" {% if p.0 == register.highest_qualification %}selected {% endif %}>{{p.1}}</option>
+                                        {% endfor %}
+                                          </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                
+                                <label class="col-sm-5 pmtallocated" id="TypeofIDsupp">22. Details of Qualifying Educational Qualification: <sup>&#9733;</sup></label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <select class="custom-select" name="qualifying_educational_qualification" id="inputGroupSelect01">
+                                            <option selected>--Please Select--</option>
+                                            <option value="12th standard">12th standard</option>
+                                            <option value="12th standard or equivalent">12th standard or equivalent</option>
+                                          </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="contain">
+                                <table style="width:150%">
+                                    <thead style="border-bottom: 2px solid grey;">
+                                        <tr>
+                                            <th style="width: 20%;">Status</th>
+                                            <th style="width: 20%;">Passing Year</th>
+                                            <th style="width: 20%;">State/UT of Board/University</th>
+                                            <th style="width: 30%;">Name of Board/University</th>
+                                            <th style="width: 30%;">Roll No</th>
+                                            <th style="width: 30%;">Percentage/CGPA</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td ><div class="form-group">
+                                                <div class="col-sm-12 forfieldPlace nopadding">
+                                                    <div class="formfieldCnt">
+                                                        <select class="custom-select" name="education_status" id="inputGroupSelect01">
+                                                            <option selected>--Select Status--</option>
+                                                            <option value="Passed">Passed</option>
+                                                            <option value="Appearing">Appearing</option>
+                                                            
+                                                          </select>
+                                                    </div>
+                                                </div>
+                                            </div></td>
+                                            <td><div class="form-group">
+                                                <div class="col-sm-12 forfieldPlace nopadding">
+                                                    <div class="formfieldCnt">
+                                                        <select class="custom-select" name="education_passing_year" id="inputGroupSelect01"><option value="">--Select--</option>
+                                                            {% for q in year %}
+                                                                <option value="{{q.0}}" {% if q.0 == register.education_passing_year %}selected {% endif %}>{{q.1}}</option>
+                                                            {% endfor %}
+                                                          </select>
+                                                    </div>
+                                                </div>
+                                            </div></td>
+                                            <td><div class="form-group">
+                                                <div class="col-sm-12 forfieldPlace nopadding">
+                                                    <div class="formfieldCnt">
+                                                        <select class="custom-select" name="education_state" id="State"><option value="">--Select--</option>
+                                                            {% for r in state_ut %}
+                                                                <option value="{{r.0}}" {% if r.0 == register.education_state %}selected {% endif %}>{{r.1}}</option>
+                                                            {% endfor %}
+                                                          </select>
+                                                    </div>
+                                                </div>
+                                            </div></td>
+                                            <td><div class="form-group">
+                                                <div class="col-sm-12 forfieldPlace nopadding">
+                                                    <div class="formfieldCnt">
+                                                        <select class="custom-select" name="education_boards" id="district">
+                                                          </select>
+                                                          <input type="hidden" value="{{application.education_boards}}" id="status_value">
+                                                    </div>
+                                                </div>
+                                            </div></td>
+                                            <td><div class="form-group">
+                                                <div class="col-sm-12 forfieldPlace nopadding">
+                                                    <div class="formfieldCnt">
+                                                        <div class="forcalenderimg">
+                                                            <input class="form-control" id="DateOfBirth" maxlength="10" name="roll_num" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="text" value="" />   
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div></td>
+                                            <td><div class="form-group">
+                                                <div class="col-sm-12 forfieldPlace nopadding">
+                                                    <div class="formfieldCnt">
+                                                        <div class="forcalenderimg">
+                                                            <input class="form-control" id="DateOfBirth" maxlength="10" name="pertencage" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="text" value="" />   
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group mt-5">
+                                <label class="col-sm-5 pmtallocated">23. Do you want to make your personal information available for accessing job opportunities in terms of DoP&T'S OM No. 39020/1/2016-Estt(P) dated 21/06/2016?   <sup>&#9733;</sup>
+                                </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 13px; padding-left: 5px;">
+                                        <span>
+                                            <input id="rbYes" name="share_info" type="radio" value="True" />
+                                            <label for="rbYes">Yes</label>
+                                        </span>
+                                        <span>
+                                            <input id="rbNo" name="share_info" type="radio" checked=True value="False" />
+                                            <label for="rbNo">No</label>
+                                        </span>
+                                        <label class="error-message" id="lblerrorGender"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">24. Correspondence Address:   <br> 
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated"> State    <br> 
+                                </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 10px;">
+                                        {{addtion.get_state_display}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated"> District   <br> 
+                                </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 10px;">
+                                        {{addtion.district}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">25. Contact Details for other Nationals:    <br> 
+                                </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    
+                                </div>
+                            </div>
+                            <div class="row" >
+                                <div class="text-uppercase text-center" style=" background-color: #394B71; padding-bottom: 10px; color: white; padding-top: 10px;">
+                                 <b style="font-size: 20px;"> Photograph and Signature </b>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-md-6 form" style="text-align: center;">
+                                    <p class="custom-file" style=" text-align: center; padding: 10px; font-size: 13px;"> Upload Photo with date printed on it (See Para-10.2 of Notice) <sup>&#9733;</sup> <br>
+                                   <span style="color: teal;"> Allowed File Size: 20 KB to 50 KB <br> Format: JPEG/JPG <br> Image Size About 3.5 cm (width) x 4.5 cm (height)  </span>
+                                      <center>  <input type="file" name="photo" onchange="Filevalidation()" class="custom-file-input" id="file"> </center>
+                                    </p>
+                                     </div>
+                                     <div class="col-md-6 form" style="text-align: center;">
+                                        <p class="custom-file" style=" text-align: center; padding: 10px; font-size: 13px;"> Upload Signature  <sup>&#9733;</sup><br>
+                                       <span style="color: teal;"> Allowed File Size 10 KB to 20 KB <br> Format: JPEG/JPG <br> Image Size: About 4.0 cm (width) x 2.0 cm (height) </span>
+                                          <center>  <input type="file" name="signature" onchange="File1validation()" class="custom-file-input" id="file1"> </center>
+                                        </p>
+                                         </div>
+                            </div>
+                            <div class="form-group mt-5">
+                                <label class="col-sm-5 pmtallocated">26. Date on which photograph has been taken(DD/MM/YYYY): </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt">
+                                        <div class="forcalenderimg">
+                                            <input class="form-control" id="DateOfBirth" maxlength="10" name="date_of_photo" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="date" value="" />   
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 pmtallocated">27. Whether the date mentioned at S.No. 26 is clearly printed on the Photograph   <sup>&#9733;</sup>
+                                </label>
+                                <div class="col-sm-7 forfieldPlace nopadding">
+                                    <div class="formfieldCnt" style="padding-top: 13px; padding-left: 5px;">
+                                        <span>
+                                            <input id="rbYes" name="date_mentioned_photo" checked=True type="radio" value="True" />
+                                            <label for="rbYes">Yes</label>
+                                        </span>
+                                        <span>
+                                            <input id="rbNo" name="date_mentioned_photo" type="radio" value="False" />
+                                            <label for="rbNo">No</label>
+                                        </span>
+                                        <label class="error-message" id="lblerrorGender"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" >
+                                <div class="text-uppercase text-center" style=" background-color: #394B71; padding-bottom: 10px; color: white; padding-top: 10px;">
+                                 <b style="font-size: 20px;"> Declaration </b>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-5">
+                                1. I have read the Notice of Examination and accept all the Terms & Conditions mentioned there in. <br>
+                                2. I hereby declare that all the statements made in this application are true, complete and correct to the best of my knowledge and belief. I understand that in the event of any information being found supressed/ false or incorrect at any stage or ineligibility being detected before or after the Examination, my candidature/ appointment is liable to be cancelled. I am willing to serve anywhere in india.
+                                    <div class="form-group mt-3">
+                                        <input type="checkbox" name="i_agree" id="agreement"/> I Agree
+                                    </div>
+                            </div>
+                               <div class="form-group">
+                                <div class="col-sm-7 col-sm-offset-5 nopadding">
+                                    <div class="sbmitandcancelBtns">
+                                        
+                                        <input type="submit" value="Save" id="btnsubmit1" name="btnsubmit1" class="btn btn-primary" />
+                                        
+                                        
+                                        <input type="button" value="Reset" id="btnPersonalReset" name="btnPersonalReset" class="btn btn-warning" />
+                                        <input type="button" value="Close" id="btn-close" name="btn-close" class="btn btn-close">
+                                    </div>
+                                </div>
+                            </div>
+                            <input id="hdnflag" name="hdnflag" type="hidden" value="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            function validNameForRegistration(e) {
+                var t; var n; var r;
+                if (e.which) { t = e.which }
+                n = String.fromCharCode(t);
+                if (n == "'" || n == "." || n.toLowerCase() == "a" || n.toLowerCase() == "b" || n.toLowerCase() == "c" || n.toLowerCase() == "d" || n.toLowerCase() == "e" || n.toLowerCase() == "f" || n.toLowerCase() == "g" || n.toLowerCase() == "h" || n.toLowerCase() == "i" || n.toLowerCase() == "j" || n.toLowerCase() == "k" || n.toLowerCase() == "l"
+                    || n.toLowerCase() == "m" || n.toLowerCase() == "n" || n.toLowerCase() == "o" || n.toLowerCase() == "p" || n.toLowerCase() == "q" || n.toLowerCase() == "r" || n.toLowerCase() == "s" || n.toLowerCase() == "t" || n.toLowerCase() == "u" || n.toLowerCase() == "v" || n.toLowerCase() == "w" || n.toLowerCase() == "x" || n.toLowerCase() == "y"
+                    || n.toLowerCase() == "z" || n.toLowerCase() == " ") {
+                    return true
+                }
+                else {
+                    return false;
+                }
+            }
+    
+            function validateIdNumber(event) {
+                //////debugger;
+                if (event.charCode == 39) {
+                    return false;
+                }
+                return (event.charCode == 8 || event.charCode == 9 || event.charCode == 45 || event.charCode == 47 ||
+                    (event.charCode >= 39 && event.charCode <= 46 && event.charCode == 39) || (event.charCode >= 48 && event.charCode <= 57) ||
+                    (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 65 && event.charCode <= 90))
+            }
+            function validateRollNumber(event) {
+                //////debugger;
+                if (event.charCode == 39 || event.charCode == 46) {
+                    return false;
+                }
+                else if (event.charCode == 47) {
+                    return true;
+                }
+                return (event.charCode == 8 || event.charCode == 9 || event.charCode == 32 || event.charCode == 39 || event.charCode == 45 || event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 65 && event.charCode <= 90))
+            }
+        </script>
+    </form>
+        
+
+
+
+    </div>
+    <script>
+
+$("#Serviceman1").click(function () {
+    $("#Serviceman3").prop('disabled', '');
+    $("#Serviceman4").prop('disabled', '');  
+
+});
+$("#Serviceman2").click(function () {
+    $("#Serviceman3").prop('disabled', 'disabled');
+    $("#Serviceman4").prop('disabled', 'disabled');
+});
+
+$("#join1").click(function () {
+    $("#join_date").prop('disabled', '');
+});
+
+$("#join2").click(function () {
+    $("#join_date").prop('disabled', 'disabled');
+});
+
+$("#age1").click(function () {
+    $("#age3").prop('disabled', '');
+});
+
+$("#age2").click(function () {
+    $("#age3").prop('disabled', 'disabled');
+});
+
+$('#center1').change(function(e) {
+    if($('#center1').val() == $('#center2').val()){
+        $('#center1').val('');
+        alert("center not be same");
+    }
+    if($('#center1').val() == $('#center3').val()){
+        $('#center1').val('');
+        alert("center not be same");
+    }
+});
+$('#center2').change(function(e) {
+    if($('#center2').val() == $('#center1').val()){
+        $('#center2').val('');
+        alert("center not be same");
+    }
+    if($('#center2').val() == $('#center3').val()){
+        $('#center2').val('');
+        alert("center not be same");
+    }
+});
+$('#center3').change(function(e) {
+    if($('#center3').val() == $('#center2').val()){
+        $('#center3').val('');
+        alert("center not be same");
+    }
+    if($('#center3').val() == $('#center1').val()){
+        $('#center3').val('');
+        alert("center not be same");
+    }
+});
+
+$("#testmeduim1").change(function () {
+                if($("#testmeduim2").val() != $("#testmeduim1").val()){
+                    $("#testmeduim3").text('media is not matching');
+                    $("#testmeduim2").val('');
+                }else{
+                    $("#testmeduim3").text('');
+                }
+            });
+
+$("#testmeduim2").change(function () {
+    if($("#testmeduim2").val() != $("#testmeduim1").val()){
+        $("#testmeduim3").text('media is not matching');
+        $("#testmeduim2").val('');
+    }else{
+        $("#testmeduim3").text('');
+    }
+});
+
+$('#State').change(function(e) {
+    var state = $("#State").val();
+    var status_value = $("#status_value").val();
+    myselect =  $('#district');
+    $.ajax({
+        url:"/get-education/?state="+state+"",
+        success: function(data)
+
+                           {
+                           myselect.empty();
+                           myselect.append("<option value='0' selected='selected'>Choose a value</option>");
+                           for(i=0;i<data.length;i++)
+                            {
+
+                                {
+                                myselect.append("<option value="+data[i]+">" + data[i] + "</option>");
+                                }
+                                }
+                            }
+
+    })
+
+});
+
+$(document).ready(function(e) {
+    var state = $("#State").val();
+    var status_value = $("#status_value").val();
+    myselect =  $('#district');
+    $.ajax({
+        url:"/get-education/?state="+state+"",
+        success: function(data)
+
+                           {
+                           myselect.empty();
+                           myselect.append("<option value='0' selected='selected'>Choose a value</option>");
+                           for(i=0;i<data.length;i++)
+                            {
+                            if(i == status_value)
+                                {
+                            myselect.append("<option value="+data[i]+" selected='selected'>" + data[i] + "</option>");
+                                }
+                            else
+                                {
+                                myselect.append("<option value="+data[i]+">" + data[i] + "</option>");
+                                }
+                                }
+                            }
+
+    })
+
+});
+
+Filevalidation = () => {
+		const fi = document.getElementById('file');
+		// Check if any file is selected.
+		if (fi.files.length > 0) {
+			for (const i = 0; i <= fi.files.length - 1; i++) {
+
+				const fsize = fi.files.item(i).size;
+				const file = Math.round((fsize / 1024));
+				// The size of the file.
+				if (file >= 50) {
+					alert(
+					"File too Big, please select a file less than and equal 50KB");
+                    $("#file").val('');
+				} else if (file < 20) {
+					alert(
+					"File too small, please select a file greater than and equal 20KB");
+                    $("#file").val('');
+				} else {
+					document.getElementById('size').innerHTML = '<b>'
+					+ file + '</b> KB';
+				}
+			}
+		}
+	}
+
+    File1validation = () => {
+		const fi = document.getElementById('file1');
+		// Check if any file is selected.
+		if (fi.files.length > 0) {
+			for (const i = 0; i <= fi.files.length - 1; i++) {
+
+				const fsize = fi.files.item(i).size;
+				const file = Math.round((fsize / 1024));
+				// The size of the file.
+				if (file >= 20) {
+					alert(
+					"File too Big, please select a file less than and equal 20KB");
+                    $("#file1").val('');
+				} else if (file < 10) {
+					alert(
+					"File too small, please select a file greater than and equal 10KB");
+                    $("#file1").val('');
+				} else {
+					document.getElementById('size').innerHTML = '<b>'
+					+ file + '</b> KB';
+				}
+			}
+		}
+	}
+</script>
+</body>
+</html>
+
+{% endblock %}

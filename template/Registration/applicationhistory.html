@@ -1,0 +1,153 @@
+{% extends "template/index.html" %}
+{% block body %}
+
+    <style>
+        a{
+            color:rgb(255, 255, 255);
+            text-decoration: none;
+        }
+        .apple a{
+            color:rgb(255, 255, 255);
+            text-decoration: none;
+        }
+        a:hover{
+            color:rgb(255, 255, 255);
+            text-decoration: none;
+        }
+        div.active{
+            color: rgb(255, 255, 255);
+            background-color: #036800;
+        }
+        .Header{
+            background-color:#394B71 ;
+            color: white;
+            border-style: solid;
+            border-color: white;
+            height: 30px;
+            text-align: center;
+            border-width: 1px;
+            padding-top: 3px;
+            
+        }
+        .contain {
+	
+	overflow-x: auto;
+	white-space: nowrap;
+}
+        table{
+            margin-top: 20px;
+        }
+	
+	
+	th{
+		padding: .5em;
+        border: 0.1em solid white;
+        border-bottom: black;
+        background-color: rgb(0, 183, 255);
+        color: white;
+        width:400px;
+	}
+    td{
+        width:400px;
+    }
+        
+    </style>   
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="row align-content-center" style="background-color: #4572d4; color: white; ">
+            <div class="col-md-6 text-center" >
+                <h4 style="font-size:18px;"> Welcome {{request.user.registration_set.all.0.name|title}} </h4> </div> 
+                <div class="col-md-6" style="text-align:center; padding-top:5px;" > <h6> <a href="/change-password/" style="color: white;"> Change Password </a> &nbsp; &nbsp; <a href="/logout/" style="color: white;"> - Log Out</a></h6></div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-md-3 Header"><a href="{% url 'candidate' %}" style="color: white;"> Latest Notification </a></div>
+            <div class="col-md-3 Header active"><a href="{% url 'candidate-history' %}">Application History</a></div>
+            <div class="col-md-3 Header"><a href="/edit_register/{{request.user.registration_set.all.0.id}}/" style="color: white;">Modify Registration</a></div>
+            <div class="col-md-3 Header"><a href="{% url 'candidate-marks' %}" style="color: white;">Results/Marks</a></div>
+        </div>
+        <div class="table">
+              <table border="1">
+                  <thead>
+                      <tr>
+                      <th style="text-align: center;"> Reg No </th>
+                      <th style="text-align: center;"> Post Code </th>
+                      <th style="text-align: center;"> Roll No </th>
+                      <th style="text-align: center;"> Exam Name </th>
+                      <th style="text-align: center;"> Exam Year </th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                     
+                      <!-- <td colspan="5" style="text-align: center; padding: 10px 0px 10px 0px; border: 0.2px solid grey;">  No data available in table </td> -->
+                      {% for i in application %}
+                      <tr>
+                      <td style="text-align: center;">{{i.user.username}}</td>
+                      <td style="text-align: center;">{{i.user.additiondetail_set.all.0.pin_code}}</td>
+                      <td style="text-align: center;">{{i.roll_number}}</td>
+                      <td style="text-align: center;">{{i.job.job_name}}</td>
+                      <td style="text-align: center;">{{i.job.job_year}}</td>
+                        </tr>
+                      {% endfor %}
+
+                 </tbody>
+              </table>
+        </div>
+        <div class="footerpart">
+            <footer class="footerparttop">
+                <div class="container">
+                    <div class="row">
+                        <div class="footerDiv">
+                            <div class="col-sm-12 col-md-12 text-center">
+                                <div class="footerTitle">
+                                    <h5>Staff Selection Commission</h5>
+                                    <p>Block No-12, CGO Complex, Lodhi Road, New Delhi-110003</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <footer class="cpyrighPart">
+                <div class="container">
+                    <div class="row">
+                        <div class="copyrightsSection">
+                            <div class="col-sm-3">
+                                <div class="cpyrightTxt">
+                                    <p>&copy; 2018 SSC. All Rights Reserved.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="lastUpdatedTxt">
+                                    <p> Last updated on <label id="lastUpdatedDate"></label></p>
+                                </div>
+                            </div>
+        
+                            <div class="col-sm-5">
+                                <div class="termsandconditionLinks text-right">
+                                    <ul>
+                                        
+                                        <li><a href="../Portal/Archives.html">Archives</a></li>
+                                        <li><a href="../Portal/Disclaimer.html">Disclaimer</a></li>
+                                        <li><a href="../Portal/Sitemap.html">Sitemap</a></li>
+                                        <li><a href="../Portal/Help.html">Help</a></li>
+                                        <li><a href="../Portal/WebsitePolicy.html">Website Policies</a></li>
+                                        <li><a href="../Portal/WebsiteManager.html">Web Information Manager</a></li>
+        
+                                        
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        
+    </div>
+    </body>
+    {% endblock %}

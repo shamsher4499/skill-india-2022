@@ -1,0 +1,91 @@
+{% extends "template/index.html" %}
+{% block body %}
+
+    <style>
+        a{
+            color:rgb(42, 5, 255);
+            text-decoration: none;
+        }
+        .apple a{
+            color:rgb(255, 255, 255);
+            text-decoration: none;
+        }
+        a:hover{
+            color:rgb(255, 255, 255);
+            text-decoration: none;
+        }
+        div.active{
+            color: rgb(255, 255, 255);
+            background-color: #036800;
+        }
+        .Header{
+            background-color:#394B71 ;
+            color: white;
+            border-style: solid;
+            border-color: white;
+            height: 30px;
+            text-align: center;
+            border-width: 1px;
+            padding-top: 3px;
+            
+        }
+	
+	th, td {
+		padding: .5em;
+      
+	}
+    th{
+        width:400px;
+    }
+        
+    </style>   
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row align-content-center" style="background-color: #4572d4; color: white; ">
+            <div class="col-md-6 text-center" >
+                <h4 style="font-size:18px;"> Welcome {{request.user.registration_set.all.0.name|title}} </h4> </div> 
+                <div class="col-md-6" style="text-align:center; padding-top:5px;" > <h6> <a href="/change-password/" style="color: white;"> Change Password </a> &nbsp; &nbsp; <a href="/logout/" style="color: white;"> - Log Out</a></h6></div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 20px;">
+        <div class="row apple">
+            <div class="col-md-3 Header active"><a href="{% url 'candidate' %}"> Latest Notification </a></div>
+            <div class="col-md-3 Header"><a href="{% url 'candidate-history' %}" style="color: white;">Application History</a></div>
+            <div class="col-md-3 Header"><a href="/edit_register/{{request.user.registration_set.all.0.id}}/" style="color: white;">Modify Registration</a></div>
+            <div class="col-md-3 Header"><a href="{% url 'candidate-marks' %}" style="color: white;">Results/Marks</a></div>
+        </div>
+        <div class="row">
+            <div style="text-align: center;"> 
+              <h2><b>Cautionary Message</b></h2>
+              <p><b>"Wash Your Hands Regularly, Wear Your Masks Properly & Maintain Safe Distance."</b></p> 
+            </div>
+        </div>
+        <!-- <div class="text-center" style="background-color: rgb(165, 205, 252); margin-bottom: 30px;">
+            <h4 class="text-primary" style="text-decoration: underline; padding-top: 20px;"> <b> Multi Tasking (non-technical) Staff Examination, 2021 </b></h4>
+            <p> <b> Application Start Date: 05.02.2021 <br>
+               Application End Date: 21.03.2021 (up to 11:30 p.m ) <br>
+               Last Date for making Online Fee Payment: 23.03.21 (up to 11:30 p.m ) <br>
+               Last Date for generation of Offline Challan: 25.03.2021 (up to 11:30 p.m ) <br>
+               Last Date for fee payment through Challan at SBI: 29.03.21 (During Working Hours of Bank)</b></p>
+               <a href="#" style="padding-top: 10px;"> Notification </a> <br>
+              <p style="padding: 10px 0px 20px 0px"><a href="#" style="padding-right: 20px;"> Payment Status </a> - <a href="#" style="padding-right: 20px; padding-left: 20px;"> Application Status </a> - <a href="#" style="padding-left: 20px;"> Double Verfication of Payment </a></p>
+        </div> -->
+        {% for i in job_notice %}
+        <div class="text-center" style="background-color: rgb(165, 205, 252); margin-bottom: 30px;">
+            
+            <h4 class="text-primary" style="text-decoration: underline; padding-top: 20px;"> <a href="{% if request.user.username %}{% if i.job_name.application_set.all.0 %} # {% else %} {% url 'application_form' i.job_name.id %} {% endif %}{% endif %}"><b> 
+                {{i.job_name}},{{i.job_name.job_year}} {% if i.job_name.application_set.all.0 %} (Applied) {% endif %}</b></a></h4>
+            <p> <b> Application Start Date: {{i.start_date}} <br>
+               Application End Date: {{i.end_date}} (up to 11:30 p.m ) <br>
+               Last Date for making Online Fee Payment: {{i.last_payment_date}} (up to 11:30 p.m ) <br>
+               Last Date for generation of Offline Challan: {{i.last_chalan_date}} (up to 11:30 p.m ) <br>
+               Last Date for fee payment through Challan at SBI: {{i.last_bank_date}} (During Working Hours of Bank)</b></p>
+               <a href="{{i.job_notification.url}}" style="padding-top: 10px;"> Notification </a> <br>
+              <p style="padding: 10px 0px 20px 0px"><a href="{% if i.job_name.application_set.all.0.payment_status1 == 'Pending' %}/payment_request/{{i.job_name.id}}{% else %}#{% endif %}" style="padding-right: 20px;"> {% if i.job_name.application_set.all.0 %}({{i.job_name.application_set.all.0.payment_status1}}){% endif %} Payment Status </a> - <a href="" style="padding-right: 20px; padding-left: 20px;"> ({{i.job_status}}) Application Status </a> - <a href="" style="padding-left: 20px;"> ({{i.double_payment_status}}) Double Verfication of Payment </a></p>
+              
+        </div>
+        {% endfor %}
+  </div>
+  </body>
+  {% endblock %}

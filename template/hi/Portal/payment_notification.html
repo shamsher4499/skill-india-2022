@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form by Colorlib</title>
+
+    <!-- Font Icon -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/material-design-iconic-font.min.css' %}">
+    <link rel="icon" type="icon/png" href="{% static 'images/5.png' %}">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <div class="main">
+
+        <!-- Sign up form -->
+        <section class="signup">
+            <div class="container">
+                <div class="signup-content" style="text-align:center; align-items:center; justify-content:center;">
+                    <div class="signup-form" >
+					<h2> Just click on the button to pay your bill </h2>
+                            
+                            <div class="form-group form-button">
+                                <form id="payment_form" method="post">{% csrf_token %}
+                                    <input type="hidden" name="job_id" value="{{job_id}}">
+                                <input type="submit" name="signup" id="signup" class="form-submit" value="Pay Now"/>
+                                </form>
+								<a href="/Apply/"><input type="submit" name="signup" id="signup" class="form-submit" value="Cancel"/></a>
+                            </div>
+                    </div>
+                    <div class="signup-image">
+                        <figure><img src="{% static 'images/ssc.png' %}" alt="sing up image"></figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+       
+    </div>
+
+    <!-- JS -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        $('#payment_form').submit(function(event){
+           
+                var formData = {
+                    'job_id':$('input[name=job_id]').val(),
+                    'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val()
+                };
+                $.ajax({
+                type:"POST",
+                url :"{% url 'pay_fee' %}",
+                data: formData,
+                encode:true
+                })
+                .done(function(data){
+                datas = JSON.parse(data)
+                console.log(data)
+                let amount = datas['amount'];
+                let orderid = datas['orderid'];
+                let callback_url = datas['callback_url'];
+                let keyid = datas['keyid'];
+                let job_name = datas['job_name'];
+                var options = { "key": keyid,
+                        "amount": amount*100,
+                        "currency": "INR",
+                        "name": job_name,
+                        "description": "https://www.edu-nsdcindia.org/",
+                        "image": "{% static 'images/ssc.png' %}",
+                        "order_id": orderid,
+                        "callback_url": callback_url
+                        };
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+    
+                });
+                event.preventDefault();
+        });
+    
+    </script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

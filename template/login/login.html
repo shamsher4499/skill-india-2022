@@ -1,0 +1,71 @@
+
+<form action="https://ssc.nic.in/Login/Login" method="post"><input name="__RequestVerificationToken" type="hidden" value="Oq0sZ1czOpMkp7FnUok_S8N0KTH8tKHB5Rh6MTkkiXwS45xTpwmdXy-EdfwMCLWu0MAS3u2DTtMFyqgcmGs2cxxkflYxi-fT9wluZYihxoQ1" />    <div class="candidateApplyLogin">
+    <div class="cRegTxtright">
+        <h3>Login</h3>
+        <div class="form-group">
+            <label><b style="color:red">Username (Registration Number)</b></label><br />
+            <input class="form-control" data-val="true" data-val-required="Please enter UserName" id="txtUsername" maxlength="50" name="UserName" onkeypress="return (event.charCode == 45|| event.charCode == 95||event.charCode == 8 || event.charCode == 9|| event.charCode == 64|| event.charCode == 46||(event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57) ||(event.charCode >= 97 &amp;&amp; event.charCode &lt;= 122)||(event.charCode >= 65 &amp;&amp; event.charCode &lt;= 90))" tabindex="47" type="text" value="" />
+            <span class="field-validation-valid" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
+        </div>
+        <div class="form-group">
+            <label>Password (SSC Registration Password)</label>
+            <input class="form-control" data-val="true" data-val-required="Please enter Password" id="txtPassword" maxlength="50" name="Password" tabindex="48" type="password" />
+            <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+        </div>
+
+        
+        <div class="form-group">
+            <div style="margin-top: 10px;" class="row">
+                <div id="divCaptcha" class="col-sm-5" style=" padding-right 0px;">
+<img id="captchaImg"  title="Captcha" src="#" style="padding: inherit;" alt="CaptchaImage" />
+<script type="text/javascript">
+$.ajax({
+    url: "/Captcha/GetCaptchaImage",
+    success: function (response) {
+        document.getElementById('captchaImg').src = response;
+    },
+    failure: function () {
+        alert('error');
+    }
+});
+$(document).ready(function () {
+    $('#gennewcaptcha').click(function () {
+        var url = "/Captcha/GetCaptchaImage";
+        $.ajax({
+            url: url,
+            success: function (response) {
+                document.getElementById('captchaImg').src = response;
+            },
+            failure: function () {
+                alert('error');
+            }
+        });
+    });
+});
+</script>
+                </div>
+                <div class="col-sm-6" style="padding-right:15px; padding-left: 0px;">
+                    <a id="gennewcaptcha" style="font-size: 12px;">Try Another</a>
+                    <input class="form-control" data-val="true" data-val-length="Captcha lenght should be of 5 characters" data-val-length-max="5" data-val-required="Please enter Captcha correctly!!" id="txtCaptcha" maxlength="5" name="CaptchaText" placeholder="ENTER TEXT" tabindex="49" type="text" value="" />
+                </div>
+            </div>
+                <samp class="id"></samp>
+        </div>
+        
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" id="btnSubmit" disabled="disabled" value="Login">
+        </div>
+        <div class="clearfix" id="clearfixBeforLoginValidationMsg"></div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="regisandforgotPass">
+                <p><a href="#" class="frgtpasswrd" id="frgtpasswrd" data-backdrop="static" data-toggle="modal" data-target="#forGotPasspopUp">Forgot Password</a></p>
+                <p><a href="Registration/Home.html" class="signupLink" id="signUpLink">New User ? Register Now</a></p>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+</form>

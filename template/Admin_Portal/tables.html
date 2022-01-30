@@ -1,0 +1,203 @@
+{% extends "template/Admin_Portal/admin_base.html" %}
+{% load static %}
+{% block body %}
+   
+      <div class="content">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title ">Simple Table</h4>
+                  <p class="card-category"> Here is a subtitle for this table</p>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <form method="post" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>
+                          <input class="form-check-input" type="checkbox" id="all" onclick="select_checkbox()">
+                        </th>
+                        <th>
+                          ID
+                        </th>
+                        <th>
+                          Name
+                        </th>
+                        <th>
+                          State
+                        </th>
+                        <th>
+                          City
+                        </th>
+                        <th>
+                          Job
+                        </th>
+                        <th>
+                          Status
+                        </th>
+                        <th>
+                          #
+                        </th>
+                      </thead>
+                      <tbody>
+                        {% for i in application %}
+                        <tr>
+                          <td><input class="form-check-input select_form" onclick="openform()" type="checkbox" id="inventory-{{forloop.counter}}" name="inventory-{{forloop.counter}}">
+                            <input class="form-check-input" type="hidden" name="inventory_id-{{forloop.counter}}" value="{{i.id}}">
+                            <input class="form-check-input" type="hidden" id="total" value="{{application.count}}" name="total_stage">
+                          </td>
+                          <td>
+                            {{i.user.username}}
+                          </td>
+                          <td>
+                            {{i.user.registration_set.all.0.name}}
+                          </td>
+                          <td>
+                            {{i.user.registration_set.all.0.get_state_display}}
+                          </td>
+                          <td>
+                            {{i.user.additiondetail_set.all.0.district}}
+                          </td>
+                          <td class="text-primary">
+                            {{i.job.job_name}}
+                          </td>
+                          <td>
+                            {{i.status}}
+                          </td>
+                          <td class="text-primary">
+                            <a href="/issue-admit-card/{{i.id}}/"><i class="fa fa-list"></i></a>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="container" id="admit_form" style="display: none;">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label style="font-size: 11px;">Exam Date</label>
+                          <input type="date" name="exam_date"  class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label style="font-size: 11px;">Reporting Time</label>
+                          <input type="time" name="exam_reporting_time"  class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label style="font-size: 11px;">Gate Close Time</label>
+                          <input type="time" name="exam_gate_close"  class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label style="font-size: 11px;">Exam Start Time</label>
+                          <input type="time" name="exam_start_time"  class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label style="font-size: 11px;">Exam End Time</label>
+                          <input type="time" name="exam_end_time" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div>
+                          <label style="font-size: 11px;">Exam Controller Sign</label>
+                          <input type="file" name="examination_controller"  class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Exam Shift</label>
+                          <select name="exam_shift" class="form-control">
+                            <option value="Shift-1">Shift 1</option>
+                            <option value="Shift-2">Shift 2</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                    <div class="clearfix"></div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  <!--   Core JS Files   -->
+</body>
+
+
+<script type="text/javascript">
+  function selectAll() {
+
+      var items = document.getElementById('total').value;
+      for (var i = 1; i <= items; i++) {
+      var id_se = 'inventory-'+i;
+      var check_select = document.getElementById(id_se);
+          if (check_select.type == 'checkbox')
+              check_select.checked = true;
+              document.getElementById("admit_form").style.display = "block";
+      }
+      return true;
+  }
+
+  function UnSelectAll() {
+      var items = document.getElementById('total').value;
+      for (var i = 1; i <= items; i++) {
+      var id_se = 'inventory-'+i;
+      var check_select = document.getElementById(id_se);
+          if (check_select.type == 'checkbox')
+              check_select.checked = false;
+              document.getElementById("admit_form").style.display = "none";
+      }
+      return true;
+  }
+function select_checkbox(){
+  var items = document.getElementById('all');
+  if (items.checked == false){
+      UnSelectAll();
+  }else{
+      selectAll();
+  }
+}
+
+// function openform(){
+//   var items = document.getElementsByClassName('select_form');
+//   alert(items.id)
+//   if (items.checked == true){
+//       document.getElementById("admit_form").style.display = "block";
+//   }
+//   else{
+//       document.getElementById("admit_form").style.display = "none";
+//   }
+      
+// }
+function openform(){
+var items = document.getElementById('total').value;
+      for (var i = 1; i <= items; i++) {
+      var id_se = 'inventory-'+i;
+      var check_select = document.getElementById(id_se);
+          if (check_select.checked == true){
+            document.getElementById("admit_form").style.display = "block";
+              return true;
+          }       
+      }
+      document.getElementById("admit_form").style.display = "none";
+}
+
+</script>
+{% endblock %}

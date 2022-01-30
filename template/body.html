@@ -1,0 +1,1071 @@
+{% extends 'template/index.html' %}
+{% block body %}
+{% load static %}
+<head>
+  <!--  <link rel="preconnect" href="https://cbpssubscriber.mygov.in/assets/uploads/89vQkZbZihu8Szgn">
+    <link rel="dns-prefetch" href="https://cbpssubscriber.mygov.in/assets/uploads/89vQkZbZihu8Szgn"> -->
+    </head>
+    
+    <div id="overlay" style="display:none">
+        <img src="{% static 'images/loading.gif' %}" alt="Loading" />
+    </div>
+    <section class="bodypart" id="bdyCntpart">
+        <div class="container">
+            <div class="row">
+                <div class="totalbdybg portalPage">
+                    <!-- <div class="col-md-12 col-sm-12">
+                        <div class="text-center mainTitleFPage">
+                              <h2>Welcome TO Staff Selection Commission</h2>
+                        </div>
+                    </div>  -->
+                    <div class="col-md-3 col-sm-3">
+                        <div class="rightsideSection">
+    
+    
+    
+    <form action="{% url 'login_user' %}" method="post">
+        {% csrf_token %}
+        <input name="__RequestVerificationToken" type="hidden" value="Oq0sZ1czOpMkp7FnUok_S8N0KTH8tKHB5Rh6MTkkiXwS45xTpwmdXy-EdfwMCLWu0MAS3u2DTtMFyqgcmGs2cxxkflYxi-fT9wluZYihxoQ1" />    <div class="candidateApplyLogin" style="word-wrap: break-word;">
+            {% if not request.user.id %}
+            <div class="cRegTxtright">
+                <h3>Login</h3>
+                <div class="form-group">
+                    <label style="padding-top: 5px;"><b style="color:red; font-weight: 500;">Username (Registration Number)</b></label><br />
+                    <input class="form-control" type="text" name="username" value="" />
+                    <span class="field-validation-valid" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label>Password (Registration Password)</label>
+                    <input class="form-control" name="password" type="password" />
+                    <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Login">
+                </div>
+                <div class="clearfix" id="clearfixBeforLoginValidationMsg"></div>
+    
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <div class="regisandforgotPass">
+                        <p><a href="#" class="frgtpasswrd" id="frgtpasswrd" data-backdrop="static" data-toggle="modal" data-target="#forGotPasspopUp">Forgot Password</a></p>
+                        <p><a href="{% if request.user.id %}{% url 'edit_register' request.user.registration_set.all.0.id %}{% else %}{% url 'register' %}{% endif %}" class="signupLink" id="signUpLink">New User ? Register Now</a></p>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+            {% else %}
+            <div class="currentEventsCalendar">
+                <div>
+                    
+                    <div style="padding: 8px;">
+                        User Logged in as:{{request.user.registration_set.all.0.name}}
+                        <br>
+                        Registration ID:{{request.user.username}}
+                        <br><br>
+                        <a href="/candidate-profile/" class="btn btn-primary" style="background-color: #4572d4;">Dashboard</a> <a href="/logout/" class="btn btn-success" style="background-color: #036800;">Logout</a>
+                    </div>
+
+            </div>
+
+            
+        </div>
+            {% endif %}
+            
+        </div>
+    </form>
+    <input data-val="true" data-val-required="Please enter UserName" id="UserName" name="UserName" type="hidden" value="" />
+    <!-- Modal -->
+    <div class="modal fade " id="unlockPopup" role="dialog">
+        <div class="modal-dialog ">
+    
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Unlock Account</h2>
+                    <a class="close closeUnlock" data-dismiss="modal"><i class="fa fa-times"></i></a>
+                </div>
+                <div class="modal-body">
+                    <div class="unlockAccountPopup">
+                        <div class="cUnlockAccount">
+                            <form role="form">
+                                <div class="form-group">
+                                    <p id="pOTPTenMinsValid" style="display:none;"><b style="color:red">An OTP has already been generated.Please use the same OTP or wait for 10 minutes to generate a new OTP.</b></p>
+    
+                                    <label class="col-sm-3"><b style="color:red">Username (Registration Number)</b></label><br />
+                                    <div class="col-sm-6">
+                                        <input class="form-control" id="txtUAUsername" name="UserName" type="text" value="" />
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="sbmitandcancelBtns">
+                                            <button type="button" id="btnUASubmit" class="btn btn-primary" disabled="disabled">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divOTP" class="divOTP" style="background:white;">
+                                    <div class="form-group"><label class="col-sm-3">Mobile OTP  </label><div class="col-sm-6"><input class="form-control" id="txtMobileOTP" maxlength="4" name="MobileOTP" onKeyDown="if(this.value.length==4 &amp;&amp; event.keyCode>47 &amp;&amp; event.keyCode &lt; 58) return false;" type="number" value="" /></div></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3">OR</label>
+                                    </div>
+                                    <div class="form-group"><label class="col-sm-3">Email OTP  </label> <div class="col-sm-6"><input class="form-control" id="txtEmailOTP" maxlength="4" name="EmailOTP" onKeyDown="if(this.value.length==4 &amp;&amp; event.keyCode>47 &amp;&amp; event.keyCode &lt; 58) return false;" type="number" value="" /></div></div>
+    
+                                    
+                                    
+                                    
+                                    <div class="form-group">
+                                        <div style="margin-top: 10px;" class="row">
+                                            <div id="divCaptcha1" class="col-sm-3" style=" padding-right 0px; padding-top:5px">
+    <img id="captchaImg1" title="Captcha" src="#" style="padding: inherit;" alt="CaptchaImage" />
+    <script type="text/javascript">
+        $.ajax({
+            url: "/Captcha/GetCaptchaImage1",
+            success: function (response) {
+                document.getElementById('captchaImg1').src = response;
+            },
+            failure: function () {
+                alert('error');
+            }
+        });
+        $(document).ready(function () {
+            $('#gennewcaptcha1').click(function () {
+                var url = "/Captcha/GetCaptchaImage1";
+                $.ajax({
+                    url: url,
+                    success: function (response) {
+                        document.getElementById('captchaImg1').src = response;
+                    },
+                    failure: function () {
+                        alert('error');
+                    }
+                });
+            });
+        });
+    </script>
+                                            </div>
+                                            <div class="col-sm-6" style="padding-right:15px; padding-left: 0px;">
+                                                <a id="gennewcaptcha1" style="font-size: 12px;">Try Another</a>
+                                                <input class="form-control" data-val="true" data-val-length="Captcha lenght should be of 5 characters" data-val-length-max="5" data-val-required="Please enter Captcha correctly!!" id="txtCaptcha1" maxlength="5" name="CaptchaText" placeholder="ENTER TEXT" tabindex="49" type="text" value="" />
+                                            </div>
+                                        </div>
+                                            <samp class="id"></samp>
+                                    </div>
+                                    
+    
+                                    <div class="col-sm-offset-3 col-sm-6">
+                                        <div class="sbmitandcancelBtns">
+                                            <button class="btn btn-sm btn-primary" id="btnUAFSubmit" type="button" disabled="disabled">Submit</button>
+                                            <button class="btn btn-warning" id="btnReset" type="button">Reset</button>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="uaalert" id="UAAlert">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+    
+    
+            $('input').removeAttr("autocorrect");
+            $('#CaptchaInputText').on('keydown', function (e) {
+                var codes = { 9: 'TAB' };
+                if (e.shiftKey && e.keyCode in codes)$('#txtPassword').focus();
+            });
+            $('#CaptchaImage').attr("alt", "Captcha Image");
+    
+            $('#UAAlert').attr("style", "display:none")
+            $('.captchaSection #CaptchaInputText').attr("maxlength", 5);
+            $('.captchaSection #CaptchaInputText').removeAttr("autocorrect");
+            $('#txtEmailOTP').attr("maxlength", 4);
+            $('#txtEmailOTP').attr("maxlength", 4);
+    
+            $('.captchaSection #CaptchaInputText').keydown(function (e) {
+                if (e.ctrlKey || e.altKey) {
+                    e.preventDefault();
+                } else {
+                    var key = e.keyCode;
+                    if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 65 && key <= 90))) {
+                        e.preventDefault();
+                    }
+                }
+            });
+    
+            $('#txtUsername').keydown(function (event) {
+                /// Portion of code to manually tab over different element
+                ////Implementation........
+                if (navigator.userAgent.indexOf("Firefox") > 0) {
+                    if (event.which === 9 && !event.shiftKey) {
+                        // $(this).closest('.form-group').children('input').focus();
+                        $('#txtPassword').focus();
+                        return false;
+                    }
+                    else if (event.which === 9) {
+                        $('#previnputlogin').focus();
+                        return false;
+                    }
+                }
+            })
+    
+            $('#txtUsername').bind('input propertychange', function (event) {
+                var a = $('#txtUsername').val().replace(/\s/g, "").length;
+                var b = $('#txtPassword').val().replace(/\s/g, "").length;
+    
+                ///*Commented for STQC
+                var c = $('#txtCaptcha').val().replace(/\s/g, "").length;
+                if (a != 0 & b != 0 & c == 5) {
+                    $("#btnSubmit").removeAttr('disabled', 'disabled');
+                }
+    
+                if (a == 0 | b == 0 | c < 5) { $("#btnSubmit").attr('disabled', 'disabled'); }
+    
+            });
+    
+            $('#txtPassword').bind('input propertychange', function () {
+    
+                var a = $('#txtUsername').val().replace(/\s/g, "").length;
+                var b = $('#txtPassword').val().replace(/\s/g, "").length;
+    
+                ///*Commented for STQC
+                var c = $('#txtCaptcha').val().replace(/\s/g, "").length;
+                if (a != 0 & b != 0 & c == 5) {
+                    $("#btnSubmit").removeAttr('disabled', 'disabled');
+                }
+    
+                if (a == 0 | b == 0 | c < 5) { $("#btnSubmit").attr('disabled', 'disabled'); }
+            });
+    
+            $('#txtCaptcha').bind('input propertychange', function () {
+    
+                var a = $('#txtUsername').val().replace(/\s/g, "").length;
+                var b = $('#txtPassword').val().replace(/\s/g, "").length;
+    
+                ///*Commented for STQC
+                var c = $('#txtCaptcha').val().replace(/\s/g, "").length;
+                if (a != 0 & b != 0 & c == 5) {
+                    $("#btnSubmit").removeAttr('disabled', 'disabled');
+                }
+    
+                if (a == 0 | b == 0 | c < 5) { $("#btnSubmit").attr('disabled', 'disabled'); }
+            });
+    
+            $('#txtUAUsername').bind('input propertychange', function () {
+                var a = $('#txtUAUsername').val().length;
+                if (a != 0) { $("#btnUASubmit").removeAttr('disabled', 'disabled'); }
+                if (a == 0) { $("#btnUASubmit").attr('disabled', 'disabled'); }
+            });
+    
+            $('#txtEmailOTP').bind('input propertychange', function () {
+                var a = $('#txtEmailOTP').val().length;
+                var b = $('#txtMobileOTP').val().length;
+                if (a != 0 || b != 0) { $('#btnUAFSubmit').removeAttr('disabled', 'disabled'); }
+                if (a == 0 && b == 0) { $('#btnUAFSubmit').attr('disabled', 'disabled'); }
+            });
+    
+            $('#txtMobileOTP').bind('input propertychange', function () {
+                var a = $('#txtEmailOTP').val().length;
+                var b = $('#txtMobileOTP').val().length;
+                if (a != 0 || b != 0) { $('#btnUAFSubmit').removeAttr('disabled', 'disabled'); }
+                if (a == 0 && b == 0) { $('#btnUAFSubmit').attr('disabled', 'disabled'); }
+            });
+            $('.uaalert').hide();
+            //$('#gennewcaptcha').click(function () {
+            //    var url = "/Captcha/LoadPartialView";
+            //    $.ajax({
+            //        url: url,
+            //        success: function (response) {
+            //            debugger;
+            //            $('#divCaptcha').html(response);
+            //        },
+            //        failure: function () {
+            //            alert('error');
+            //        }
+            //    });
+            //});
+            $('#btnUAFSubmit').click(function (e) {
+                //debugger;
+                e.preventDefault();
+    
+                var eotp = $('#txtEmailOTP').val();
+                var motp = $('#txtMobileOTP').val();
+                var captcha = $.trim($('#txtCaptcha1').val());
+    
+                if ($.trim($('#txtEmailOTP').val()) == "" && $.trim($('#txtMobileOTP').val()) == "") {
+                    $('#UAAlert').html('<p style="color:red"><b>Please enter otp sent on your mobile or email id.!!</b></p>');
+                    $('#UAAlert').removeAttr("style", "display:none");
+                    return false;
+                }
+                else if ($.trim($('#txtMobileOTP').val()) != "" && $.trim($('#txtMobileOTP').val()).length != 4) {
+                    $('#UAAlert').html('<p style="color:red"><b>Please enter a valid mobile otp.!!</b></p>');
+                    $('#UAAlert').removeAttr("style", "display:none");
+                    return false;
+                }
+                else if ($.trim($('#txtEmailOTP').val()) != "" && $.trim($('#txtEmailOTP').val()).length != 4) {
+                    $('#UAAlert').html('<p style="color:red"><b>Please enter a valid email otp.!!</b></p>');
+                    $('#UAAlert').removeAttr("style", "display:none");
+                    return false;
+                }
+    
+                    
+                    
+                    
+                else if ($.trim($('#txtCaptcha1').val()) == "" && $.trim($('#txtCaptcha1').val()).length != 5) {
+                    $('#UAAlert').html('<p style="color:red"><b>Please enter a valid Captcha!!</b></p>');
+                    $('#UAAlert').removeAttr("style", "display:none");
+                    return false;
+                }
+                
+    
+                $('#overlay').show();
+    
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json;charset=utf-8',
+                    url: '/Login/UnlockAccount',
+                    data: JSON.stringify({ emailotp: "'" + eotp + "'", mobileotp: "'" + motp + "'",captcha: captcha  }),
+                    success: function (response) {
+                        $('#overlay').hide();
+                        if (response == "true") {
+    
+    
+                            $('#btnUAFSubmit').attr('style', 'display:none');
+                            $('#btnReset').attr('style', 'display:none');
+    
+                            $('#UAAlert').html('<p style="color:green"><b>Your account is unlocked successfully.!!</b><br /><button class="btn-success" id="btnClose" type="button" data-dismiss="modal">Ok</button></p>');
+    
+                            $('#UAAlert').removeAttr("style", "display:none");
+    
+                        }
+                        else {
+                            if ($.trim(response).includes("~")) {
+                                var otpinvalidmessage = $.trim(response).split("~");
+    
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/Login/GenerateOTP',
+                                    data: { username: $('#txtUAUsername').val() },
+                                    success: function (response2) {
+                                        $('#UAAlert').html("<p style='color: red'><b>" + otpinvalidmessage[1]+".!!</b></p>");
+                                        $('#UAAlert').show();
+                                    },
+                                    error: function (xhr, statusText, error) {
+                                        //debugger;
+                                        $('#UAAlert').html("<p style='color: red'><b>" + otpinvalidmessage[1] + ".!!</b></p>");
+                                        $('#UAAlert').show();
+                                    }
+                                });
+                            }
+                            else if ($.trim(response).includes(">"))
+                            {
+                                var url = "/Captcha/GetCaptchaImage1";
+                                $.ajax({
+                                    url: url,
+                                    success: function (response) {
+                                        document.getElementById('captchaImg1').src = response;
+                                    },
+                                    failure: function () {
+                                        alert('error');
+                                    }
+                                });
+                                $('#UAAlert').html('<p style="color:red"><b>Please enter a valid Captcha!!</b></p>');
+                                $('#UAAlert').removeAttr("style", "display:none");
+                            }
+                            else {
+                                var url = "/Captcha/GetCaptchaImage1";
+                                $.ajax({
+                                    url: url,
+                                    success: function (response) {
+                                        document.getElementById('captchaImg1').src = response;
+                                    },
+                                    failure: function () {
+                                        alert('error');
+                                    }
+                                });
+                                $('#UAAlert').html('<p style="color:red"><b>Incorrect OTPs. Please check and try again.!!</b></p>');
+                                $('#UAAlert').removeAttr("style", "display:none");
+                            }
+                        }
+                    },
+                    error: function (xhr,statusText,error) {
+                        $('#overlay').hide();
+                        alert(error);
+                    }
+                });
+            });
+            $('#btnUASubmit').click(function () {
+    
+                $('#overlay').show();
+                $.ajax({
+                    type: 'POST',
+                    url: '/Login/GenerateOTP',
+                    data: { username: $('#txtUAUsername').val() },
+                    success: function (response) {
+                        $('#overlay').hide();
+                        if (response == 1) {
+                            $('#pOTPTenMinsValid').attr('style', 'display:none');
+                        }
+                        if (response == 0) {
+                            $('.uaalert').show();
+                            document.getElementById('UAAlert').innerHTML = "<p style=\"color:red\"><b>Please contact your Administrator to Unlock Your Account!!</b></p>";
+                        }
+                        if (response == 2) {
+                            $('.uaalert').show();
+                            document.getElementById('UAAlert').innerHTML = "<p style=\"color:red\"><b>Please check your Username!!</b></p>";
+                        }
+                        if (response == 3) {
+                            $('#pOTPTenMinsValid').attr('style', 'display:block');
+                        }
+                        if (response == 1 || response == 3) {
+                            $('#txtUAUsername').attr('disabled', 'disabled');
+                            $('#btnUASubmit').attr('style', 'display:none');
+                            $('#divOTP').show();
+                            $('#divOTP').attr("style", "background:white;display:block;");
+                            $('.uaalert').hide();
+                        }
+                    },
+                    failure: function () {
+                        $('#overlay').hide();
+                        alert('error');
+                    }
+                });
+            });
+            $('.closeUnlock').click(function () {
+                $('.uaalert').hide();
+                $('.cUnlockAccount input.form-control').val('');
+                $('#btnUASubmit').attr('style', 'display:block');
+                $('#txtUAUsername').removeAttr('disabled', 'disabled');
+                $('#divOTP').hide();
+            });
+    
+            $('.closeUnlockM').click(function () {
+                $('#unlockPopupM').hide();
+            });
+    
+            $('#btnUnlockButton').click(function () {
+                $('#unlockPopupM').hide();
+            });
+    
+            $('#btnReset').click(function () {
+                $('#txtEmailOTP').val("");
+                $('#txtMobileOTP').val("");
+                $('#CaptchaInputText').val("");
+                $("#UAAlert").hide();
+            });
+    
+            $("#txtUsername").blur(function () {
+    
+                $("#divLoginValidationMssg").html("");
+    
+                var thisVal = $.trim($(this).val());
+                var isValNum = $.isNumeric(thisVal);
+                var isValidMail = false;
+                var regNoValInt=0;
+    
+                var emailRegExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    
+                if (emailRegExp.test(thisVal) == true) {
+                    isValidMail = true;
+                }
+                else {
+                    isValidMail = false;
+                }
+                var isInValidRange = false;
+    
+                var validRange = thisVal.substr(0, 2);
+                var validRangeNew = thisVal.substr(0, 1);
+    
+                if(isValNum==true){
+                    regNoValInt = parseInt(thisVal);
+                }
+    
+                if (isValNum && thisVal.length == 11) {
+                    var intRange = parseInt(validRange);
+                    var intRangeNew = parseInt(validRangeNew);
+                    if ((intRange >= 71 && intRange <= 76) || (intRange >= 81 && intRange <= 85) || (intRange >= 91 && intRange <= 95) || (intRangeNew >= 1 && intRangeNew <= 5)) {
+                        isInValidRange = true;
+                    }
+                    else {
+                        isInValidRange = false;
+                    }
+                }
+    
+                if ((isValNum == true && thisVal.length != 11 && thisVal.length != 6) || (isValNum == false && isValidMail == false) ||
+                    (thisVal.length == 11 && isValNum == true && isInValidRange == false) || (isValNum == true && regNoValInt <= 0)) {
+                    if ($("#divLoginValidationMssg").length > 0) {
+                        $("#divLoginValidationMssg").html("Please enter a valid user name.");
+                    }
+                    else {
+                        $("div#clearfixBeforLoginValidationMsg").after("<div class='alert alert-danger text-center' id='divLoginValidationMssg'>Please enter a valid user name.</div>");
+                    }
+                    $(this).val("");
+                }
+            });
+    
+            $("#txtMobileOTP").keypress(function () {
+                $("#UAAlert").hide();
+                if ($.trim($(this).val()).length >= 4) {
+                    return false;
+                }
+            });
+    
+            $("#txtEmailOTP").keypress(function () {
+                $("#UAAlert").hide();
+                if ($.trim($(this).val()).length >= 4) {
+                    return false;
+                }
+            });
+    
+            $('#CaptchaInputText').blur(function () {
+    
+                if (this.value != null && this.value.length != 5)
+                    $('#lblErrorCaptcha').text('Please fill a valid captcha.');
+                else
+                    $('#lblErrorCaptcha').text('');
+    
+            });
+        });
+    </script>
+    
+                        </div>
+                        <div class="currentEventsCalendar">
+    
+                            <h4 class="text-center" style="background-color: #4572d4;">Calendar</h4>
+                            <div class="currentEventsCalendarList_New scrollbar" id="forScrollCalendar">
+                                
+                                <div class="eachCurrentEvent">
+    
+                                    <!-- == Edited on 14-03-2018 : Added file info == -->
+                                    <p class="English">
+                                        Examination Calender
+                                            <img class="file-icon" alt="pdficon" title="pdf document. opens in new tab" src="{% static 'images/icons/pdficon.png' %}" />
+                                            <small style="font-family:Calibri;">
+                                                (29.50 KB)
+                                            </small>
+    
+                                        <a href="SSCFileServer/PortalManagement/UploadedFiles/calender2019_25012019.html" target="_blank"><b>Click Here</b></a>
+                                    </p>
+                                </div>
+    
+                        </div>
+    
+                        
+                    </div>
+                    
+                    <div class="currentEventsCalendar" style="text-align:center;">
+                <a href="https://cbpssubscriber.mygov.in/aff/ddAca4lVen8MKVeZ" target="_blank" title="External site that opens in a new window" rel="noopener noreferrer"><img class="lazy" src="{% static 'images/covid.jfif' %}" alt="new cdps image." style="height:300px;width:300px;"></a>
+                        
+                    </div>
+                    
+                    </div> 
+    
+                    <div class="col-md-6 col-sm-6">
+                        <div class="leftsideNotifications_New">
+                            <h3 class="text-center" style="background-color: #4572d4;">Latest News</h3>
+                            <div class="scrollingNotifications_New scrollbar" id="forScrollNews">
+                                <ul>
+                                    {% for i in notification %}
+                                        <li>
+                                            
+                                            <div class="eachNotification">
+                                                
+                                                <span>{{ i.not_date|date }}</span>
+    
+    
+                                                <!-- ==Edited on 13-06-2021 : Added file info== -->
+                                                <p class="English">
+                                                    {% if i.not_icon %}
+                                                        <img src="{{ i.not_icon.url }}" alt="new gif Image" />
+                                                    {% endif %}
+                                                    <a href="{{ i.not_pdf.url }}" target="_blank">
+                                                        {{ i.not_title }}
+                                                    </a>
+                                                            <img class="file-icon" alt="pdficon" title="pdf document. opens in new tab" src="{% static 'images\icons\pdficon.png' %}" />
+                                                            <small style="font-family:Calibri;">
+                                                                ({{ i.get_size }} KB)
+                                                            </small>
+                                                </p>
+                                                
+                                            </div>
+                                            
+                                        </li>
+                                        {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-md-3 col-sm-3 ">
+                        <div style="background: #036800;">
+                            <div>
+                                <div style="width: 160px !important;margin: 10px auto 5px auto;"><img src="{% static 'images/aa.jpg' %}" alt="Gandhi"></div>
+                                <div class="gandhiTxt">
+                                    <p style="text-align: center; color: white;"><b>“Live as if you were to die tomorrow. Learn as if you were to live forever.”</b></p>
+                                    <h4 style="color: white;">- Mahatma Gandhi</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="currentEvents_New ">
+                            
+                            <div style="text-align:center">
+                                <a href="#" target="_blank" title="External site that opens in a new window" rel="noopener noreferrer"><img src="{% static 'images/Mahatma_Gandhi.jpg' %}" alt="150 years of celebrating Mahatma."></a>
+                </div> <hr>
+                <div style="text-align:center;padding-top: 20%;">
+                                <a href="#" target="_blank" title="External site that opens in a new window" rel="noopener noreferrer"><img src="{% static 'images/logo-slider6.png' %}" alt="National Career Service."></a>
+                            </div>
+    
+                        </div>
+                    </div>
+    
+    
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    
+        <div id="forGotPasspopUp" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+    
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="forgotClose close" data-toggle="modal" data-target="#forGotPasspopUp">&times;</button>
+                    </div>
+                    <div class="modal-body">
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+    
+            
+    
+            $('#CaptchaInputText').attr("maxlength", 5);
+            $('#CaptchaInputText').keydown(function (e) {
+                if (e.ctrlKey || e.altKey) {
+                    e.preventDefault();
+                } else {
+                    var key = e.keyCode;
+                    if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 65 && key <= 90))) {
+                        e.preventDefault();
+                    }
+                }
+            });
+            $(".divotp").attr("style", "display:none");
+            $('#txtEmailid').bind('input propertychange', function () {
+                var Evalue = $('#txtEmailid').val().replace(/\s/g, "").length;
+                var Mvalue = $('#txtMobile').val().replace(/\s/g, "").length;
+                var State = $('#OriginState').val();
+    
+                if (Evalue != 0 || Mvalue != 0) {
+                    $("#btnsubmit").removeAttr('disabled', 'disabled');
+                }
+                if (Evalue == 0 && Mvalue == 0) {
+                    $("#btnsubmit").attr('disabled', 'disabled');
+                }
+    
+                if (State == "") {
+                    $("#btnsubmit").attr('disabled', 'disabled');
+                } else {
+                    if (Evalue == 0 && Mvalue == 0) {
+                        $("#btnsubmit").attr('disabled', 'disabled');
+                    } else {
+                        $("#btnsubmit").removeAttr('disabled', 'disabled');
+                    }
+                }
+            });
+            $('#txtMobile').bind('input propertychange', function () {
+                var Evalue = $('#txtEmailid').val().replace(/\s/g, "").length;
+                var Mvalue = $('#txtMobile').val().replace(/\s/g, "").length;
+                var State = $('#OriginState').val();
+    
+                if (Evalue != 0 || (Mvalue <= 12 && Mvalue >= 10)) {
+                    $("#btnsubmit").removeAttr('disabled', 'disabled');
+                }
+                if (Evalue == 0 && (Mvalue == 0 || Mvalue > 12 || Mvalue < 10)) {
+                    $("#btnsubmit").attr('disabled', 'disabled');
+                }
+    
+                if (State == "") {
+                    $("#btnsubmit").attr('disabled', 'disabled');
+                } else {
+                    if (Evalue == 0 && Mvalue == 0) {
+                        $("#btnsubmit").attr('disabled', 'disabled');
+                    } else {
+                        $("#btnsubmit").removeAttr('disabled', 'disabled');
+                    }
+                }
+            });
+    
+            $('#OriginState').bind('input propertychange', function () {
+                var Evalue = $('#txtEmailid').val().replace(/\s/g, "").length;
+                var Mvalue = $('#txtMobile').val().replace(/\s/g, "").length;
+                var State = $('#OriginState').val();
+    
+                if (State == "") {
+                    $("#btnsubmit").attr('disabled', 'disabled');
+                } else {
+                    if (Evalue == 0 && Mvalue == 0) {
+                        $("#btnsubmit").attr('disabled', 'disabled');
+                    } else {
+                        $("#btnsubmit").removeAttr('disabled', 'disabled');
+                    }
+                }
+            });
+    
+            $('#txtMobile').keypress(function () {
+                $("#error_message").html("");
+                $(this).attr("maxlength", "10");
+                var thisVal = $.trim($(this).val());
+                if (thisVal.length >= 10) {
+                    return false;
+                }
+            });
+    
+            $('#txtEmailid').keypress(function () {
+                $("#error_message").html("");
+            });
+    
+            $("#btnsubmit").click(function () {
+                $('#overlay').show();
+                //debugger;
+                $("#error_message").html("");
+                $("#btnsubmit").attr("disabled");
+                var EV = $.trim($('#txtEmailid').val());
+                var MV = $.trim($('#txtMobile').val());
+                var State = $.trim($('#OriginState').val());
+                if (State == "" || State == null || State == undefined) {
+                    $('#error_message').html("Please check the details entered!!");
+                    $('#overlay').hide();
+                    return false;
+                } else {
+                    if (EV.replace(/\s/g, "").length == 0 && (MV.replace(/\s/g, "").length != 10)) {
+                        $('#error_message').html("Please check the details entered!!");
+                        $('#overlay').hide();
+                        return false;
+                    } else {
+                        $('#error_message').html("");
+                    }
+                }
+                $('#txtFMobOTP').val('');
+                $('#txtFEmailOTP').val('');
+                $('.login-page.divotp .error').hide();
+                //debugger;
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json;charset=utf-8',
+                    url: '/ApplicantForgot/SendOTP',
+                    /*data: JSON.stringify({ EV: "'" + EV + "'", MV: "'" + MV + "'", State: "'" + State + "'" }),*/
+                    data: "{'EV':'" + EV + "','MV':'" + MV + "','State':'" + State + "'}",
+                    dataType: 'text',
+                    success: function (result) {
+                        //debugger;
+                        $('#overlay').hide();
+                        var obj = $.parseJSON(result);
+                        if (obj == "true") {
+                            $('#overlay').show();
+                            window.location.href = 'ApplicantForgot/PopulateAFchangepassword.html';
+                            $('#error_message').html("");
+                        }
+                        else if (obj == "false") {
+                            $('#error_message').html("Please check the details entered!!");
+                            return false;
+                        }
+                        else if ($.trim(obj).toLowerCase() == "error") {
+                            $('#error_message').html("Server is busy please try again later");
+                            return false;
+                        }
+                        else if ($.trim(obj).toLowerCase() == "input required") {
+                            $('#error_message').html("Please enter your email id or mobile no. to proceed");
+                            return false;
+                        }
+                        else if ($.trim(obj).toLowerCase() == "invalid state") {
+                            $('#error_message').html("Please select a valid state name");
+                            return false;
+                        }
+                        else if ($.trim(obj).toLowerCase() == "invalid mobile") {
+                            $('#error_message').html("Please enter a valid mobile no.");
+                            return false;
+                        }
+                        else if ($.trim(obj).toLowerCase() == "invalid email") {
+                            $('#error_message').html("Please enter a valid email id");
+                            return false;
+                        }
+                        else {
+                            $('#overlay').show();
+                            window.location.href = 'ApplicantForgot/PopulateAFchangepassword9bc5.html?message=An%20OTP%20has%20already%20been%20generated.Please%20use%20the%20same%20OTP%20or%20wait%20for%2010%20minutes%20to%20generate%20a%20new%20OTP.';
+                            $('#error_message').html("");
+                        }
+    
+                    },
+                    error: function () {
+                        $('#overlay').hide();
+                        $('#error_message').html("Please check the details entered!!");
+                    }
+                });
+            });
+    
+            $("#btnsubmitotp").click(function () {
+                $('#overlay').show();
+                debugger;
+                $("#btnsubmit").attr("disabled");
+                var EV = $('#txtFMobOTP').val();
+                var MV = $('#txtFEmailOTP').val();
+                $('.login-page.divotp .error').hide();
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json;charset=utf-8',
+                    url: '/ApplicantForgot/validateOTP',
+                    data: JSON.stringify({ EV: "'" + EV + "'", MV: "'" + MV + "'" }),
+                    dataType: 'text',
+                    success: function (result) {
+                        $('#overlay').hide();
+                        var obj = result;
+                        if (obj == "The entered OTPs are validated successfully.") {
+                            $('#error_messageotp').html("");
+                            window.location.href = 'ApplicantForgot/PopulateAFchangepassword.html'
+                        }
+                        if (obj == "Error: captcha is not valid")
+                        {
+                            $('#error_messageotp').html("");
+                            $('#error_messagecaptcha').html("Error: captcha is not valid");
+                            $('#error_messagecaptcha').show();
+                        }
+                        else {
+                            $('#error_messageotp').html("Please enter valid OTPs");
+                            $('#error_messageotp').show();
+                        }
+    
+                    },
+                    error: function () {
+                        $('#overlay').hide();
+                        $('#error_messageotp').html("Please check the details entered!!");
+                    }
+                });
+            });
+    
+            $("#txtFMobOTP").bind('input propertychange', function () {
+                debugger;
+                var value1 = $("#txtFMobOTP").val().replace(/\s/g, "");
+                var value2 = $("#txtFEmailOTP").val().replace(/\s/g, "");
+                var value3 = $(".forgotCaptcha #CaptchaInputText").val().replace(/\s/g, "");
+                if (value1 != "" & value2 != "" & value3.length == 5) {
+                    $("#btnsubmitotp").removeAttr("disabled","disabled");
+                }
+                if (value1 == "" || value2 == "" || value3.length < 5) {
+                    $("#btnsubmitotp").attr("disabled","disabled");
+                }
+            });
+            $("#txtFEmailOTP").bind('input propertychange', function () {
+                debugger;
+                var value1 = $("#txtFMobOTP").val().replace(/\s/g, "");
+                var value2 = $("#txtFEmailOTP").val().replace(/\s/g, "");
+                var value3 = $(".forgotCaptcha #CaptchaInputText").val().replace(/\s/g, "");
+                if (value1 != "" & value2 != "" & value3.length == 5) {
+                    $("#btnsubmitotp").removeAttr("disabled", "disabled");
+                }
+                if (value1 == "" || value2 == "" || value3.length < 5) {
+                    $("#btnsubmitotp").attr("disabled", "disabled");
+                }
+            });
+            $(".forgotCaptcha #CaptchaInputText").bind('input propertychange', function () {
+                debugger;
+                var value1 = $("#txtFMobOTP").val().replace(/\s/g, "");
+                var value2 = $("#txtFEmailOTP").val().replace(/\s/g, "");
+                var value3 = $(".forgotCaptcha #CaptchaInputText").val().replace(/\s/g, "");
+                if (value1 != "" & value2 != "" & value3.length == 5) {
+                    $("#btnsubmitotp").removeAttr("disabled", "disabled");
+                }
+                if (value1 == "" || value2 == "" || value3.length < 5) {
+                    $("#btnsubmitotp").attr("disabled", "disabled");
+                }
+            });
+    
+        });
+    
+    
+    </script>
+    
+                    <div class="col-sm-offset-1 col-sm-10">
+                        <div class="vertical-center forgtPopUpCnt">
+                            <div class="login-page forgtPopUpText">
+                                <div class="cLoginApplication">
+                                    <h3> Forgot Registration ID / Password</h3>
+                                    <div class="cRegTxt">
+                                        <form action="{% url 'forget_password' %}" method="post">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <label>Email ID<sup></sup></label>
+                                                <input class="form-control" data-val="true" data-val-email="Please enter a valid email id" id="txtEmailid" maxlength="60" name="email" type="email" />
+                                                <span class="field-validation-valid" data-valmsg-for="emailid" data-valmsg-replace="true"></span>
+                                            </div>
+                                            <div class="sbmitandcancelBtns">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            </div>
+                                            <div id="error_message" class="error">
+                                            </div>
+                                        </form>
+    
+                                        <div class="clearfix"></div>
+    
+    
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+    
+                            </div>
+    
+                            
+    
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+               
+    
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+
+
+        <div class="logoSliderpart">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="logoCaurosel owl-carousel" id="logoCaurosel">
+                            {% for k in footer_img %}
+                            <div class="item">
+                                <a href="https://incredibleindia.org/" target="_blank" title="External site that opens in a new window" rel="noopener noreferrer"><img src="{{k.img}}" alt="{{k.img_alt}}"></a>
+                            </div>
+                            {% endfor %}
+    
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+    
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="{% if original %}modal fade in sucMsgPopRHQ{% else %}hidden{% endif %}" id="confirmMobile" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:480px;">
+                <h4>Change Password First</h4>
+                <div class="modal-body ">
+                    <form method="post" action="{% url 'change_password' %}">
+                        {% csrf_token %}
+                    <div class="form-group">
+                            <label class="col-sm-5" id="oldPassword">Old Password</label>
+                            <div class="col-sm-7 forfieldPlace nopadding">
+                                <div class="formfieldCnt">
+                                    <input class="form-control" id="old_password" name="old_password" onkeypress type="password" value="" />
+                                    <label class="error-message" id="oldPassword1"></label>
+                                    <input class="form-control" id="username" name="username" onkeypress type="hidden" value="{{u}}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5" id="newPassword">New Password</label>
+                            <div class="col-sm-7 forfieldPlace nopadding">
+                                <div class="formfieldCnt">
+                                    <input class="form-control" id="new_password" maxlength="12" name="new_password" type="password" value="" />
+
+                                    <label class="error-message" id="newPassword1"></label>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="form-group">
+                            <label class="col-sm-5" id="confirmPassword">Confirm Password</label>
+                            <div class="col-sm-7 forfieldPlace nopadding">
+                                <div class="formfieldCnt">
+                                    <input class="form-control" id="confirm_password" maxlength="12" name="confirm_password" type="password" value=""/>
+
+                                    <label class="error-message" id="confirmPassword1"></label>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="sbmitandcancelBtns">
+                        <label class="col-sm-5" id="lblConfrmMobile"></label>
+                        <label class="col-sm-5" id="lblConfrmMail"></label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="sbmitandcancelBtns">
+                        <button type="submit" class="btn btn-rhqDelete" data-dismiss="modal" id="btnconfrmMobile"> Confirm</button>
+                        <a href="/"><button type="button" class="btn btn-warning btncloseno" data-dismiss="modal" id="btncancelMobile"> Cancel</button></a>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{% static 'js/jquery.lazy.min.js' %}"></script>
+    
+    <script>
+        $(document).ready(function () {
+            $('#owlCaurosel').owlCarousel({
+                loop: true,
+                autoplay: true,
+                margin: 10,
+                responsiveClass: true,
+                responsive: {
+                    0: {
+                        items: 1,
+                        nav: true
+                    },
+                    600: {
+                        items: 1,
+                        nav: false
+                    },
+                    1000: {
+                        items: 1,
+                        nav: true,
+                        loop: false
+                    }
+                }
+            });
+            $('#logoCaurosel').owlCarousel({
+                loop: true,
+                autoplay: true,
+                margin: 10,
+                items: 5,
+                responsiveClass: true,
+                responsive: {
+                    0: {
+                        items: 1,
+                        nav: true
+                    },
+                    600: {
+                        items: 3,
+                        nav: true
+                    },
+                    1000: {
+                        items: 5,
+                        nav: true
+                    }
+                }
+            });
+        });
+    </script>
+<script>
+    {% for i in messages %}
+    alert('{{i}}');
+    {% endfor %}
+</script>
+    <script>
+        $(function() {
+            $('.lazy').lazy();
+        });
+    </script>
+{% endblock %}

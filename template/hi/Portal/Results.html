@@ -1,0 +1,452 @@
+{% extends 'template/index.html' %}
+{% load static %}
+{% block body %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .tipue_search_right ul {
+            list-style: none;
+            margin: 0 auto;
+        }
+
+            .tipue_search_right ul li {
+                color: #fff;
+                float: left;
+                text-align: center;
+                cursor: pointer;
+                font-weight: 900;
+                text-transform: uppercase;
+                font-family: Arial;
+                transition: 0.5s;
+                position: relative;
+            }
+
+                .tipue_search_right ul li:nth-child(3) {
+                    background: #D80B15;
+                }
+
+                .tipue_search_right ul li:hover:not(.active) {
+                    background: #D80B15;
+                }
+
+        .search-box {
+            background: #E8E8E4;
+            position: absolute;
+            right: 0px;
+            width: 205px;
+            height: 37px;
+            line-height: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            border-top: 4px solid #394b71;
+            display: none;
+        }
+
+            .search-box:before {
+                content: "";
+                position: absolute;
+                top: -30px;
+                right: 5px;
+                border-left: 12px solid transparent;
+                border-right: 12px solid transparent;
+                border-top: 14px solid transparent;
+                border-bottom: 14px solid #394b71;
+            }
+
+        #tipue_search_input {
+            width: 130px;
+            border: 1px solid #394b71;
+            outline: none;
+            color: black;
+            font: 13px 'Roboto', sans-serif;
+            height: 22px;
+            text-indent: 10px;
+        }
+
+        #btnSiteSearch {
+            background: #394b71;
+            border: none;
+        }
+
+        #divSiteSearch {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .search-box i {
+            color: #394b71;
+        }
+
+        .search-box input[type="button"] {
+            width: 80px;
+            padding: 5px 0;
+            background: #D80B15;
+            color: #fff;
+            margin-left: -6px;
+            border: 1px solid #D80B15;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .tipue_search_content_title {
+            font: 100 26px/1.7 Roboto, sans-serif;
+        }
+
+        #tipue_search_results_count {
+            color: #333;
+        }
+
+        #tipue_search_results_count, #tipue_search_warning, .tipue_search_content_url, .tipue_search_content_debug, .tipue_search_related_text {
+            font: 300 14px/1.7 Roboto, sans-serif;
+        }
+    </style>
+
+</head>
+    
+<script src="{% static 'js/JavaScript.js' %}"></script>
+<section class="bodypart">
+    <div class="container">
+        <div class="row">
+            <div class="bdyCntinner">
+                <div class="innerpageCnt">
+                    <h2>Result</h2>
+
+                    <ul class="noticesTabs">
+                        <!-- <li class="active"><a href="#noticescgl-0" id="noticescglid">CGL</a></li> -->
+                        {% for i in result %}
+                        <li><a href="#result-{{i.id}}" id="notice">{{i.notice_name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                    <div class="tabsSectionPrt">
+                        {% for i in result %}
+                        <div class="tab-content" id="result-{{i.id}}">
+                            <div class="noticeTxt">
+                                <div class="noticeTable">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Uploaded Uploaded Date</th>
+                                                    <th>Examination Name and Year</th>
+                                                    <th>Write Up</th>
+                                                    <th>Result</th>
+                                                    <th>Marks</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for j in i.result_set.all %}
+                                                    <tr>
+                                                        <td>{{j.upload_date}}</td>
+                                                        <td><span>{{j.exam_name}}</span></td>
+                                                        <td>
+                                                                <a href="{{j.notice_pdf.url}}" target="_blank">click here</a>
+                                                                    <small style="font-family:Calibri;">
+                                                                        ({{ j.get_size }} KB)
+                                                                    </small>
+                                                                    <img class="file-icon" alt="" title="pdf document. opens in new tab" src="{% static 'images\icons\pdficon.png' %}"/>
+                                                        </td>
+                                                        <td>
+                                                                <a href="{{j.result_pdf.url}}" target="_blank">click here</a>
+                                                                    <small style="font-family:Calibri;">
+                                                                        ({{ j.get_size_1 }} KB)
+                                                                    </small>
+                                                                    <img class="file-icon" alt="" title="pdf document. opens in new tab" src="{% static 'images\icons\pdficon.png' %}" />
+                                                        </td>
+                                                        <td>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        var id = ;
+        if(id == 1)
+        {
+            $("ul.noticesTabs li").removeClass("active");
+            $("#noticescglid").parent().addClass("active");
+            $(".tab-content").hide();
+            var activeTab = $("#noticescglid").attr("href");
+            $(activeTab).fadeIn();
+        }
+        if(id == 2)
+        {
+            $("ul.noticesTabs li").removeClass("active");
+            $("#noticeschslid").parent().addClass("active");
+            $(".tab-content").hide();
+            var activeTab = $("#noticeschslid").attr("href");
+            $(activeTab).fadeIn();
+            return false;
+        }
+        if(id == 3)
+        {
+            $("ul.noticesTabs li").removeClass("active");
+            $("#noticesstenoid").parent().addClass("active");
+            $(".tab-content").hide();
+            var activeTab = $("#noticesstenoid").attr("href");
+            $(activeTab).fadeIn();
+            return false;
+        }
+        if(id == 4)
+        {
+            $("ul.noticesTabs li").removeClass("active");
+            $("#noticesjeid").parent().addClass("active");
+            $(".tab-content").hide();
+            var activeTab = $("#noticesjeid").attr("href");
+            $(activeTab).fadeIn();
+            return false;
+        }
+        if(id == 5)
+        {
+            $("ul.noticesTabs li").removeClass("active");
+            $("#noticescapfid").parent().addClass("active");
+            $(".tab-content").hide();
+            var activeTab = $("#noticescapfid").attr("href");
+            $(activeTab).fadeIn();
+            return false;
+        }
+        if(id == 6)
+        {
+            $("ul.noticesTabs li").removeClass("active");
+            $("#noticesgdcontableid").parent().addClass("active");
+            $(".tab-content").hide();
+            var activeTab = $("#noticesgdcontableid").attr("href");
+            $(activeTab).fadeIn();
+            return false;
+        }
+        if(id == 7)
+        {
+            $("ul.noticesTabs li").removeClass("active");
+            $("#noticesjhtid").parent().addClass("active");
+            $(".tab-content").hide();
+            var activeTab = $("#noticesjhtid").attr("href");
+            $(activeTab).fadeIn();
+            return false;
+        }
+        if(id == 8)
+        {
+            $("ul.noticesTabs li").removeClass("active");
+            $("#noticesdepartmentid").parent().addClass("active");
+            $(".tab-content").hide();
+            var activeTab = $("#noticesdepartmentid").attr("href");
+            $(activeTab).fadeIn();
+            return false;
+        }
+        if(id > 8)
+        {
+            $("ul.noticesTabs li").removeClass("active");
+            $("#noticesothersid").parent().addClass("active");
+            $(".tab-content").hide();
+            var activeTab = $("#noticesothersid").attr("href");
+            $(activeTab).fadeIn();
+            return false;
+        }
+    });
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122939704-1"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-122939704-1');
+    </script>
+
+<script type="text/javascript" src="../Scripts/last_update_date.js" class = "lastupdatedatejs" param = "1" defer ></script> 
+   
+<script type="text/javascript" src="{% static 'js/owl.carousel.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/tipuesearch.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+<script src="{% static 'jquery/jquery.validate-vsdoc.js' %}"></script>
+<script src="{% static 'jquery/jquery.validate.min.js' %}"></script>
+<script src="{% static 'jquery/jquery.validate.unobtrusive.min.js' %}" type="text/javascript"></script>
+<script type="text/javascript" src="{% static 'js/main.min.js' %}"></script>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('.incFont').click(function () {
+                curSize = parseInt($('body').css('font-size')) + 1;
+                if (curSize < 16)
+                    $('body').css('font-size', curSize);
+                $('.bodypart a').css('font-size', curSize);
+                $('.eachNotification p a').css('font-size', curSize);
+                $('.bodypart p').css('font-size', curSize);
+            });
+            $('.decFont').click(function () {
+                curSize = parseInt($('body').css('font-size')) - 1;
+                if (curSize > 12)
+                    $('body').css('font-size', curSize);
+                $('.bodypart a').css('font-size', curSize);
+                $('.eachNotification p a').css('font-size', curSize);
+                $('.bodypart p').css('font-size', curSize);
+            });
+            $('.curFont').click(function () {
+                curSize = '14px';
+                if (curSize >= 12)
+                    $('body').css('font-size', curSize);
+                $('.bodypart a').css('font-size', curSize);
+                $('.eachNotification p a').css('font-size', curSize);
+                $('.bodypart p').css('font-size', curSize);
+
+            });
+            $(".skpmnt").click(function () {
+                var offset = 20; //Offset of 20px
+
+                $('html, body').animate({
+                    scrollTop: $("#bdyCntpart").offset().top + offset
+                }, 1000);
+            });
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                $(this).parent().siblings().removeClass('open');
+                $(this).parent().toggleClass('open');
+            });
+
+            $("#CaptchaInputText").keydown(function (e) {
+                if (e.which == 9)
+                    focusNextElement();
+            });
+
+            //function focusNextElement() {
+            //    //add all elements we want to include in our selection
+            //    var focussableElements = 'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
+            //    if (document.activeElement && document.activeElement.form) {
+            //        var focussable = Array.prototype.filter.call(document.activeElement.form.querySelectorAll(focussableElements),
+            //        function (element) {
+            //            //check for visibility while always include the current activeElement
+            //            return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
+            //        });
+            //        var index = focussable.indexOf(document.activeElement);
+            //        if(index > -1) {
+            //            var nextElement = focussable[index + 1] || focussable[0];
+            //            nextElement.focus();
+            //        }
+            //    }
+            //}
+            
+            $('.dropdown-toggle').keydown(function (event) {
+                if (event.which == 9 ) {
+                    debugger;
+                    $(this).trigger('click');
+                    if (navigator.userAgent.indexOf("Firefox") <= 0) {
+                        $(this).next('li').focus();
+                    }
+                    else {
+                        var elements = $(this).next('ul').children();
+                       
+                        //var element = $(this + ' ul >li');
+                            //$(this).siblings().first().child('li').focus();
+                        elements[0].focus();
+                    }
+                }
+            });
+            $('.last').keydown(function (event) {
+                if (event.which == 9 && (!event.shiftKey)) {
+                    $(this).closest('.dropdown').removeClass("open");
+                }
+            })
+            $('.first').keydown(function (event) {
+                if (event.shiftKey && event.which == 9) {
+                    $(this).siblings('.dropdown').removeClass("open");
+                }
+            });
+            $(".Language").change(function () {
+                var url = window.location.href.split('../index.html');
+                if (window.location.href.indexOf("Portal") == -1) {
+                    document.location = '../hi/Portal/PortalHome.html';
+                }
+                else {
+                    var temp = url[url.length - 1];
+                    if (temp == "") temp = url[url.length - 2];
+
+                    if (temp == "PortalHome")
+                        document.location = '../hi/Portal/PortalHome.html';
+                    if (temp == "Notices")
+                        document.location = '../hi/Portal/Notices.html';
+                    if (temp == "Results")
+                        document.location = '../hi/Portal/Results.html';
+                    if (temp == "AnswerKey")
+                        document.location = '../hi/Portal/AnswerKey.html';
+                    if (temp == "Tender")
+                        document.location = '../hi/Portal/Tender.html';
+                    if (temp == "AdmitCard")
+                        document.location = '../hi/Portal/AdmitCard.html';
+                    if (temp == "AnnualReport")
+                        document.location = '../hi/Portal/AnnualReport.html';
+                    if (temp == "BackgroundCommission")
+                        document.location = '../hi/Portal/PortalHome.html';
+                    if (temp == "ChairmanMessage")
+                        document.location = '../hi/Portal/ChairmanMessage.html';
+                    if (temp == "CertificatesFormat")
+                        document.location = '../hi/Portal/CertificatesFormat.html';
+                    if (temp == "FunctionCommission")
+                        document.location = '../hi/Portal/PortalHome.html';
+                    if (temp == "SetupCommission")
+                        document.location = '../hi/Portal/PortalHome.html';
+                    if (temp == "OrganizationStructure")
+                        document.location = '../hi/Portal/OrganizationStructure.html';
+                    if (temp == "Syllabus")
+                        document.location = '../hi/Portal/Syllabus.html';
+                    if (temp == "TermsandConditions")
+                        document.location = '../hi/Portal/TermsandConditions.html';
+                    if (temp == "Disclaimer")
+                        document.location = '../hi/Portal/Disclaimer.html';
+                    if (temp == "Feedback")
+                        document.location = '../hi/Portal/Feedback.html';
+                    if (temp == "WebsitePolicy")
+                        document.location = '../hi/Portal/WebsitePolicy.html';
+                    if (temp == "Help")
+                        document.location = '../hi/Portal/Help.html';
+                    if (temp == "Search")
+                        document.location = '../hi/Portal/Search.html';
+                    if (temp == "Apply")
+                        document.location = '../hi/Portal/Apply.html';
+                    if (temp == "PIDPI")
+                        document.location = '../hi/Portal/PIDPI.html';
+                    if (temp == "RightToInformation")
+                        document.location = '../hi/Portal/RightToInformation.html';
+                    if (temp == "RegionalNetwork")
+                        document.location = '../hi/Portal/RegionalNetwork.html';
+                    if (temp == "TentativeVacancy")
+                        document.location = '../hi/Portal/TentativeVacancy.html';
+                    if (temp == "SpecialInstructions")
+                        document.location = '../hi/Portal/SpecialInstructions.html';
+                    if (temp == "WebsiteManager")
+                        document.location = '../hi/Portal/WebsiteManager.html';
+
+                }
+            })
+        })
+    </script>
+
+</body>
+
+<!-- Mirrored from ssc.nic.in/Portal/Notices by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 19 Mar 2021 09:52:42 GMT -->
+</html>
+{% endblock %}

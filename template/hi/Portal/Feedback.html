@@ -1,0 +1,221 @@
+{% extends 'template/index.html' %}
+{% block body %}
+{% load static %}
+
+<section class="bodypart">
+    <div class="container">
+        <div class="row">
+            <div class="innerpageCnt">
+<form action="{% url 'feedback' %}" id="feedbackform" method="post"><input name="__RequestVerificationToken" type="hidden" value="iN52ILs6jqbmwfThgcyV8It_4P0Har8DHURo8R65dml_CrqrSpH4xeovan_TkDN-97APltTqQ2g8D6uZNq3E0BHyTx4ztk0EHmzczyQyZ-Q1" />                    <h2>Feedback</h2>
+    {% csrf_token %}
+                    <div class="clearfix"></div>
+                    <div>
+                        <strong>Note: </strong><span> Fields Marked with <sup>&#9733;</sup> are mandatory.</span>
+                    </div>
+                    <!--  Edited on 15-03-2018     -->
+                    <div class="col-md-10 col-md-offset-1 add-form-fields" style="float:none">
+                        <div class="divInputs ">
+                            <div class="form-group">
+                                <label class="col-sm-4 col-sm-offset-1">Subject <sup>&#9733;</sup></label>
+                                <div class="col-sm-4  nopadding">
+                                    <input class="form-control" data-val="true" data-val-regex="&#39;Subject&#39; field contains some invalid character/s!" data-val-regex-pattern="[a-zA-Z0-9\s]*$" data-val-required="&#39;Subject&#39; field can not be empty!" id="subject" maxlength="100" name="subject" placeholder="Maximum length is 100 characters" type="text" value="" required/>
+                                </div>
+                                <span class="field-validation-valid" data-valmsg-for="subject" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 col-sm-offset-1">Full Name <sup>&#9733;</sup></label>
+                                <div class="col-sm-4  nopadding">
+                                    <input class="form-control" data-val="true" data-val-regex="&#39;Full Name&#39; field contains some invalid character/s!" data-val-regex-pattern="\w+[a-zA-Z\s&#39;]*$" data-val-required="&#39;Full Name&#39; field can not be empty!" id="name" maxlength="50" name="name" placeholder="Maximum length is 50 characters" type="text" value="" required/>
+                                </div>
+                                <span class="field-validation-valid" data-valmsg-for="name" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 col-sm-offset-1">Email ID <sup>&#9733;</sup></label>
+                                <div class="col-sm-4  nopadding">
+                                    <input class="form-control text-upper" data-val="true" data-val-regex="&#39;Email Id&#39; field contains some invalid character/s!" data-val-regex-pattern="\w+([-+.&#39;]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" data-val-required="&#39;Email Id&#39; field can not be empty!" id="emailid" maxlength="50" name="emailid" placeholder="Maximum length is 50 characters" type="text" value="" required/>
+
+
+                                </div>
+                                <span class="field-validation-valid" data-valmsg-for="emailid" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 col-sm-offset-1">Residential Address </label>
+                                <div class="col-sm-4  nopadding">
+                                    <textarea class="form-control" cols="20" data-val="true" data-val-regex="&#39;Residential Address&#39; field contains some invalid character/s!" data-val-regex-pattern="[a-zA-Z0-9.,\s\-]*$" id="address" maxlength="300" name="address" placeholder="Maximum length is 300 characters" rows="2">
+</textarea>
+                                </div>
+
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 col-sm-offset-1">Feedback Comments<sup>&#9733;</sup></label>
+                                <div class="col-sm-4  nopadding">
+                                    <textarea class="form-control" cols="20" data-val="true" data-val-regex="&#39;Feedback Comments&#39; field contains some invalid character/s!" data-val-regex-pattern="[a-zA-Z0-9.,\s\-]*$" data-val-required="&#39;Feedback Comments&#39; field can not be empty!" id="feedback" maxlength="300" name="feedback" placeholder="Maximum length is 300 characters" rows="2" required>
+</textarea>
+                                </div>
+                                <span class="field-validation-valid" data-valmsg-for="feedback" data-valmsg-replace="true"></span>
+                            </div>
+
+                        </div>
+                        <div class="clearfix text-center"></div>
+                        <div class="clearfix text-center"></div>
+                        <div class="success col-sm-7 col-sm-offset-5">
+                            <input type="submit" value="Submit" id="btnsubmit1" name="btnsubmit1" class="btn btn-primary" aria-invalid="false">
+
+                            <input type="reset" value="Reset" id="btnPersonalReset" name="btnPersonalReset" class="btn btn-warning " style="margin:0px;">
+                        </div>
+                    </div>
+                    <input id="message" hidden />
+</form>
+            </div>
+
+            <div id="successModal" class="modal fade" data-backdrop="static" data-keyboard="false" role="dialog">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header success">
+                            <span>सफलता।</span>
+                        </div>
+                        <div class="modal-body">
+                            <p>आपकी प्रतिक्रिया सफल हो गई है।y</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="btnSuccessClose" class="btn btn-info pull-right" data-dismiss="modal" onclick="location.href='../../index.html'">ठीक।</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="errorModal" class="modal fade" data-backdrop="static" data-keyboard="false" role="dialog">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header error">
+                            <span>Error</span>
+                        </div>
+                        <div class="modal-body">
+                            <p></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="btnErrorClose" class="btn btn-close pull-right" data-dismiss="modal">बंद करे।</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+               
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+    <!-- <div class="footerpart">
+        <footer class="footerparttop">
+            <div class="container">
+                <div class="row">
+                    <div class="footerDiv">
+                        <div class="col-sm-12 col-md-12 text-center">
+                            <div class="footerTitle">
+                                <h5>कर्मचारी चयन आयोग</h5>
+                                <p>ब्लॉक संख्या-12, केन्द्रीय कार्यालय परिसर, लोदी रोड, नई दिल्ली -110003</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <footer class="cpyrighPart">
+            <div class="container">
+                <div class="row">
+                    <div class="copyrightsSection">
+                        <div class="col-sm-4">
+                            <div class="cpyrightTxt">
+                                <p>&copy; 2018 SSC. सर्वाधिकार सुरक्षित.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="lastUpdatedTxt">
+                                <p><label id="lastUpdatedDate"></label> को अंतिम अद्यतन</p>
+
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="termsandconditionLinks text-right">
+                                <ul>
+                                    
+                                    <li><a href="Archives">अभिलेखागार</a></li>
+                                    <li><a href="Disclaimer.html">डिस्क्लेमर</a></li>
+                                    
+                                    <li><a href="Help.html">सहायता</a></li>
+                                    <li><a href="WebsitePolicy.html">वेबसाइट नीति</a></li>
+                                    <li><a href="WebsiteManager.html">वेब सूचना प्रबंधक</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div> -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122939704-1"></script>
+
+    <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'UA-122939704-1');
+        </script>
+
+
+
+    <script type="text/javascript" src="../../Scripts/last_update_date.js" class="lastupdatedatejs" param="2" defer></script>       
+
+    <script type="text/javascript" src="../../Content/library/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../Content/library/assets/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="../../Content/library/assets/js/datatables.min.js"></script>
+    <script src="../../Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="../../Scripts/jquery.validate.min.js"></script>
+    <script src="../../Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Content/library/assets/js/main.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.incFont').click(function () {
+                curSize = parseInt($('body').css('font-size')) + 1;
+                if (curSize < 16)
+                    $('body').css('font-size', curSize);
+                $('.bodypart a').css('font-size', curSize);
+                $('.eachNotification p a').css('font-size', curSize);
+                $('.bodypart p').css('font-size', curSize);
+            });
+            $('.decFont').click(function () {
+                curSize = parseInt($('body').css('font-size')) - 1;
+                if (curSize > 12)
+                    $('body').css('font-size', curSize);
+                $('.bodypart a').css('font-size', curSize);
+                $('.eachNotification p a').css('font-size', curSize);
+                $('.bodypart p').css('font-size', curSize);
+            });
+            $('.curFont').click(function () {
+                curSize = '14px';
+                if (curSize >= 12)
+                    $('body').css('font-size', curSize);
+                $('.bodypart a').css('font-size', curSize);
+                $('.eachNotification p a').css('font-size', curSize);
+                $('.bodypart p').css('font-size', curSize);
+
+            });
+            $(".skpmnt").click(function () {
+                var offset = 20; //Offset of 20px
+
+                $('html, body').animate({
+                    scrollTop: $("#bdyCntpart").offset().top + offset
+                }, 1000);
+            });
+
+        });
+    </script>
+{% endblock %}

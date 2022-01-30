@@ -1,0 +1,824 @@
+{% extends "template/index.html" %}
+{% block body %}
+<style>
+     a{
+            color:rgb(255, 255, 255);
+            text-decoration: none;
+        }
+        .apple a{
+            color:rgb(255, 255, 255);
+            text-decoration: none;
+        }
+        a:hover{
+            color:rgb(255, 255, 255);
+            text-decoration: none;
+        }
+    div.Header{
+        border-left: 5px solid white;
+        height: 30px;
+    }
+    
+</style>
+    {% if request.user.is_authenticated %}
+    <div class="container-fluid">
+        <div class="row align-content-center" style="background-color: #4572d4; color: white; ">
+            <div class="col-md-6 text-center" >
+            <h4 style="font-size:18px;"> Welcome {{request.user.registration_set.all.0.name|title}} </h4> </div> 
+            <div class="col-md-6" style="text-align:center; padding-top:5px;" > <h6> <a href="/change-password/" style="color: white; padding-top: 20;"> Change Password </a> &nbsp; &nbsp; <a href="/logout/" style="color: white;"> - Log Out</a> </h6> </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if register %}
+    <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
+        <div class="row">
+            <div class="row text-center" style="background-color: #394B71;  color: white; ">
+            <div class="col-md-3 Header" style="padding-top: 5px;"><a href="{% url 'candidate' %}" style="color: white;">Latest Notification</a></div>
+            <div class="col-md-3 Header" style="padding-top: 5px;"><a href="{% url 'candidate-history' %}" style="color: white;">Application History</a></div>
+            <div class="col-md-3 Header active" style="background-color:#116738; padding-top: 5px;" ><a href="{% url 'register' %}" style="color: white;">Modify Registration</a></div>
+            <div class="col-md-3 Header" style="padding-top: 5px;"><a href="{% url 'candidate-marks' %}" style="color: white;">Results/Marks</a></div>
+        </div>
+        </div>
+        </div>
+        {% endif %}
+            <section class="bodypartReg">
+                <div class="container">
+                    <div class="row">
+                        <div class="formwithtabs">
+                            <div class="clearfix"></div>
+                            <div class="lefsideMenurightCntTab lefsideMenurightCntReg">
+                                <div class="bdyCntReg">
+                                    <div class="regStrationFormSteps" style="padding-left:70px">
+                                        <ul class="nav nav-tabs">
+                                            <!--href="#pdetails"  href="#bdetails" href="#cdetails" href="#gdetails"-->
+                                            <li class="pdetails active activeclass"><a data-toggle="tab"><i>1</i> <span>Basic Details</span></a></li>
+                                            <li class="badditionaldetails"><a href="{% if request.user.additiondetail_set.all.0.id %}{% url 'edit_additional' request.user.additiondetail_set.all.0.id %}{% else %}#{% endif %}"><i>2</i> <span>Additional And Contact Details</span></a></li>
+                                            
+                                            
+                                            <li class="bphotodetails"><a href="{% if register %}{% url 'agreecondition' %}{% else %}#{% endif %}"><i>3</i> <span>Photo And Signature Details</span></a></li>
+                                            
+                                        </ul>
+                                    </div>
+                                    <h4 id="lblregnumber"></h4>
+                                    <label id="lblstatus" for="lblstatus"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </section>
+        
+            <section class="allDetailsTabs">
+                <div class="container">
+                    <div class="row">
+        
+                        <div class="tabContentDetails">
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane tab-pdetails active" id="pdetails">
+        
+        
+        <form action="{% if register %}/edit_register/{{request.user.registration_set.all.0.id}}/{% else %}{% url 'register' %}{% endif %}" method="post" enctype="multipart/form-data" class="unselectable">
+            {% csrf_token %}
+            <div class="registration-formFields">
+                <div class="col-sm-10 col-sm-offset-1">
+                    <div id="printarea">
+                        <div class="regFieldStructure regFieldActiveStep">
+                            <h2 style="text-align: center; background-color: #4572d4;">Basic Details</h2>
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="col-sm-5">1. Do you have Aadhaar ? <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding" style="padding-top: 10px;">
+                                        <span >
+                                            <input id="rbAadharYes" name="is_aadhar" type="radio" value="True" {% if register.is_aadhar %}checked="True" {% endif %} />
+                                            <label for="rbAadharYes">Yes</label>
+                                        </span>
+                                        
+                                        <span>
+                                            <input id="rbAadharNo" name="is_aadhar" type="radio" value="False" {% if not register.is_aadhar %}checked="True" {% endif %} />
+                                            <label for="rbAadharNo">No</label>
+                                        </span>
+        
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5" id="lblAadharSupp">1a. Aadhaar Number</label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <input class="form-control no-paste" disabled="disabled" id="AadharNumber" minlength="12" onkeypress="return (event.charCode == 8 || event.charCode == 9) || (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)" type="text" value="{{register.aadhar_number}}" />
+                                            <label class="insrctions incfont" for="Aadhaar_Number_should_be_same_as_mentioned_in_Aadhaar_Card">Aadhaar Number should be same as mentioned in Aadhaar Card</label>
+                                            <label class="error-message" id="AadharNumber1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5" id="lblVerifyAadharSupp1">1b. Verify Aadhaar Number </label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <input class="form-control no-paste" disabled="disabled" id="VerifyAadharNumber" minlength="12" name="aadhar_number" onkeypress="return (event.charCode == 8 || event.charCode == 9) || (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)" type="text" value="{{register.aadhar_number}}" />
+                                            
+                                            <label class="error-message" id="AadharNumber2"></label>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                
+        
+                                <div class="form-group">
+                                    
+                                    <label class="col-sm-5 pmtallocated" id="TypeofIDsupp">1c. Type of ID <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+        <select class="form-control" id="TypeofID" name="id_type"><option value="">--Select--</option>
+        {% for i in type_of_id %}
+            <option value="{{i.0}}" {% if i.0 == register.id_type %}selected {% endif %}>{{i.1}}</option>
+        {% endfor %}
+        </select>
+                                            
+                                            <label class="insrctions incfont unselectable" for="TypeofID1">Type of ID and ID Number to be provided if you don&#39;t want to give Aadhaar number</label>
+                                            <label class="error-message" id="TypeofID1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    
+                                    <label class="col-sm-5 pmtallocated" id="IDnumbersupp">1d. ID Number <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <input class="form-control text-uppercase no-paste" id="IDnumber" maxlength="20" name="id_number" onkeypress="return validateIdNumber(event);" type="text" value="{{register.id_number}}" />
+                                            
+                                            
+                                            <label class="error-message" id="IDnumber1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">2a. Name <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+                                            <input class="form-control text-uppercase no-paste" id="Name" maxlength="60" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.name}}" />
+                                            <label class="insrctions incfont">1. Name should be same as mentioned in Matriculation Certificate</label>
+                                            <label class="insrctions incfont">2. Please enter name without any salutation (i e Shri/ Smt/ Mr/ Mrs/  Ms/ Dr/ Prof)</label>
+                                            <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+        
+                                            <label class="error-message" id="Name1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">2b. Verify Name <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+                                            <input class="form-control text-uppercase no-paste" id="VerifyName" maxlength="60" name="name" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.name}}" />
+                                            
+                                            <label class="error-message" id="VerifyName1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">2c. Have you ever changed Name? </label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt" style="padding-top: 10px;">
+                                            <span>
+                                                <input data-val="true" data-val-required="The HaveEverChangedName field is required." id="ChangedName1" name="change_name_type" type="radio" value="True"  {% if register.change_name_type %}checked="True" {% endif %}/>
+                                                <label for="rbHaveEverChangedNameYes">Yes</label>
+                                            </span>
+                                            <span>
+                                                <input id="ChangedName2" name="change_name_type" type="radio" value="False" {% if not register.change_name_type %}checked="True" {% endif %} />
+                                                <label for="rbHaveEverChangedNameNo">No</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label id="lblnewnamesupp" class="col-sm-5 pmtallocated">2d. New Name / Changed Name </label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+                                            <input class="form-control text-uppercase no-paste" id="NewName" maxlength="60" name="change_name"  onkeypress="return validNameForRegistration(event);" type="text" value="{{register.change_name}}" />
+                                            <label class="error-message" id="NewName1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+        
+        
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">3a. Father's Name <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+                                            <input class="form-control text-uppercase no-paste" id="FatherName" maxlength="60" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.father_name}}" />
+                                            <label class="insrctions incfont">1. Father's Name should be same as mentioned in Matriculation Certificate</label>
+                                            <label class="insrctions incfont">2. Please enter name without any salutation (i e Mr/ Shri/ Late/ Dr/ Prof etc</label>
+                                            <label class="error-message" id="FatherName1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">3b. Verify Father's Name <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+                                            <input class="form-control text-uppercase no-paste" id="VerifyFatherName" maxlength="60" name="father_name" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.father_name}}" />
+                                            <label class="error-message" id="VerifyFatherName1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">4a. Mother's Name <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+                                            <input class="form-control text-uppercase no-paste" id="MotherName" maxlength="60" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.mother_name}}" />
+                                            <label class="insrctions incfont">1. Mother's Name should be same as mentioned in Matriculation Certificate</label>
+                                            <label class="insrctions incfont">2. Please enter name without any salutation (i e Mrs/ Ms/ Smt/ Late/ Dr/ Prof etc</label>
+                                            <label class="error-message" id="MotherName1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">4b. Verify Mother's Name <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+                                            <input class="form-control text-uppercase no-paste" id="VerifyMotherName" maxlength="60" name="mother_name" onkeypress="return validNameForRegistration(event);" type="text" value="{{register.mother_name}}" />
+                                            <label class="error-message" id="VerifyMotherName1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">5a. Date of Birth (DD/MM/YYYY) <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <div class="forcalenderimg">
+                                                <input class="form-control" id="DateOfBirth" maxlength="10" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="date" value="{{register.dob|date:'Y-m-d'}}" />
+                                                <label class="insrctions incfont" for="DateOfBirth1">Date of Birth should be same as mentioned in Matriculation Certificate</label>
+                                                <label class="error-message" id="DateOfBirth1"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">5b. Verify Date of Birth (DD/MM/YYYY) <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <div class="forcalenderimg">
+                                                <input class="form-control datepickBoot" id="VerifyDateOfBirth" maxlength="10" name="dob" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)||(event.keyCode == 8)||(event.keyCode == 9)||(event.keyCode == 47)" type="date" value="{{register.dob|date:'Y-m-d'}}" />
+                                                
+                                                <label class="error-message" id="VerifyDateOfBirth1"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="form-group">
+                                    
+                                    <label class="col-sm-12">6. Matriculation (10<sup><font color="#000000">th</font></sup> Class) Examination details :</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated"> (i). Education Board <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <div class="formfieldCnt">
+                                                
+        <select class="form-control" id="EducationBoard"><option value="">--Select--</option>
+        {% for i in education_board %}
+            <option value="{{i.0}}" {% if i.0 == register.education_board %}selected {% endif %}>{{i.1}}</option>
+        {% endfor %}
+        </select>                                    </div>
+                                            <label class="insrctions incfont" for="EducationBoard1">Education Board of Matriculation Examination</label>
+                                            <label class="error-message" id="EducationBoard1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated"> (ii). Verify Education Board <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <div class="formfieldCnt">
+                                                
+        <select class="form-control" id="ddlEducationBoard" name="education_board"><option value="">--Select--</option>
+        {% for i in education_board %}
+            <option value="{{i.0}}" {% if i.0 == register.education_board %}selected {% endif %}>{{i.1}}</option>
+        {% endfor %}
+        </select>                                    </div>
+                                            
+                                            <label class="error-message" id="ddlEducationBoard1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">(iii). Roll Number <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <input class="form-control text-uppercase no-paste" id="SecondaryRollNum" maxlength="15" onkeypress="return validateRollNumber(event);" type="text" value="{{register.roll_number}}" />
+        
+                                            <label class="insrctions incfont">1. Roll Number should be same as mentioned in Matriculation Certificate</label>
+                                            <label class="insrctions incfont">2. Only / and - are allowed , Please enter Roll number without any other special character(s)</label>
+                                            <label class="insrctions incfont">3. If Roll Code is given in your Matriculation Certificate then enter "Roll Code - Roll No."</label>
+                                            <label class="error-message" id="SecondaryRollNum1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">(iv). Verify Roll Number <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <input class="form-control text-uppercase no-paste" id="VerifySecondaryRollNum" maxlength="15" name="roll_number" onkeypress="return validateRollNumber(event);" type="text" value="{{register.roll_number}}" />
+        
+                                            
+                                            <label class="error-message" id="VerifySecondaryRollNum1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group yearofpasscal">
+                                    <label class="col-sm-5 pmtallocated">(v). Year of Passing <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+        <select class="form-control" id="Yearofpassing" ><option value="">--Select--</option>
+        {% for i in year_of_passing %}
+            <option value="{{i.0}}" {% if i.0 == register.passing_year %}selected {% endif %}>{{i.1}}</option>
+        {% endfor %}
+        </select>                       <label class="error-message" id="Yearofpassing1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group yearofpasscal">
+                                    <label class="col-sm-5 pmtallocated">(vi). Verify Year of Passing <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+        <select class="form-control" id="ddlYearofpassing" name="passing_year"><option value="">--Select--</option>
+        {% for i in year_of_passing %}
+            <option value="{{i.0}}" {% if i.0 == register.passing_year %}selected {% endif %}>{{i.1}}</option>
+        {% endfor %}
+        </select>                                    <label class="error-message" id="ddlYearofpassing1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">7a. Gender <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt" style="padding-top: 10px;">
+                                            <span>
+                                                <input id="rbMale" name="Gender" type="radio" value="0" {% if 0 == register.gender %}checked {% endif %}/>
+                                                <label for="rbMale">Male</label>
+                                            </span>
+                                            <span>
+                                                <input id="rbFeMale" name="Gender" type="radio" value="1" {% if 1 == register.gender %}checked {% endif %}/>
+                                                <label for="rbFeMale">Female</label>
+                                            </span>
+                                            <span>
+                                                <input id="rbOthers" name="Gender" type="radio" value="2" {% if 2 == register.gender %}checked {% endif %}/>
+                                                <label for="rbOthers">Transgender</label>
+                                            </span>
+                                            <label class="error-message" id="Gender1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">7b. Verify Gender <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt" style="padding-top: 10px;">
+                                            <span>
+                                                <input id="rbVerifyMale" name="gender" type="radio" value="0" {% if 0 == register.gender %}checked {% endif %}/>
+                                                <label for="rbVerifyMale">Male</label>
+                                            </span>
+                                            <span>
+                                                <input id="rbVerifyFeMale" name="gender" type="radio" value="1" {% if 1 == register.gender %}checked {% endif %}/>
+                                                <label for="rbVerifyFeMale">Female</label>
+                                            </span>
+                                            <span>
+                                                <input id="rbVerifyOthers" name="VerifyGender" type="radio" value="2" {% if 2 == register.gender %}checked {% endif %}/>
+                                                <label for="rbVerifyOthers">Transgender</label>
+                                            </span>
+                                            <label class="error-message" id="gender1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+        
+        
+                                <div class="form-group">
+                                    <label class="col-sm-5 pmtallocated">8. Level of Educational Qualification <sup>&#9733;</sup></label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+        <select class="form-control" id="Levelofeducationqualification" name="education_level"><option value="">--Select--</option>
+        {% for i in education_level %}
+            <option value="{{i.0}}" {% if i.0 == register.education_level %}selected {% endif %}>{{i.1}}</option>
+        {% endfor %}
+        </select>                                    <label class="error-message" id="Levelofeducationqualification1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5">9a. Mobile Number <sup>&#9733;</sup> </label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <input class="form-control no-paste" id="MobileNum" maxlength="10" name="MobileNum" onkeypress="return (event.charCode == 8 || event.charCode == 9) || (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)" type="text" value="{{register.mobile_number}}" />
+                                            <label class="error-message" id="MobileNum1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label class="col-sm-5">9b. Verify Mobile Number <sup>&#9733;</sup> </label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <input class="form-control no-paste" id="VerifyMobileNum" maxlength="10" name="mobile_number" onkeypress="return (event.charCode == 8 || event.charCode == 9) || (event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57)" type="text" value="{{register.mobile_number}}" />
+                                            <label class="error-message" id="VerifyMobileNum1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5">10a. Email ID<sup>&#9733;</sup> </label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+                                            <input class="form-control no-paste" id="EmailID" maxlength="60" onkeypress="return (event.charCode == 45|| event.charCode == 95||event.charCode == 8 || event.charCode == 9|| event.charCode == 64|| event.charCode == 46||(event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57) ||(event.charCode >= 97 &amp;&amp; event.charCode &lt;= 122)||(event.charCode >= 65 &amp;&amp; event.charCode &lt;= 90))" type="text" value="{{register.email_id}}" />
+                                            <label class="error-message" id="EmailID1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5">10b. Verify Email ID<sup>&#9733;</sup> </label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            
+                                            <input class="form-control no-paste" id="VerifyEmailID" maxlength="60" name="email_id" onkeypress="return (event.charCode == 45|| event.charCode == 95||event.charCode == 8 || event.charCode == 9|| event.charCode == 64|| event.charCode == 46||(event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57) ||(event.charCode >= 97 &amp;&amp; event.charCode &lt;= 122)||(event.charCode >= 65 &amp;&amp; event.charCode &lt;= 90))" type="text" value="{{register.email_id}}" />
+                                            <label class="error-message" id="VerifyEmailID1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5"><b>&#8226;</b>  State / UT of Permanent Address <sup>&#9733;</sup> </label>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+        <select class="form-control" id="OriginState" name="state"><option value="">--Select--</option>
+        {% for i in state %}
+            <option value="{{i.0}}" {% if i.0 == register.state %}selected {% endif %}>{{i.1}}</option>
+        {% endfor %}
+        </select>                                    <label class="error-message" id="OriginState1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-7 col-sm-offset-5 nopadding">
+                                        <div class="sbmitandcancelBtns">
+                                            
+                                            <input type="submit" value="Save" id="btnsubmit1" name="btnsubmit1" class="btn btn-primary" />
+                                            
+                                            
+                                            <input type="button" value="Reset" id="btnPersonalReset" name="btnPersonalReset" class="btn btn-warning" />
+                                            <a href="../index.html" id="btnBasicClose" class="btn btn-close">Close</a>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <input id="hdnflag" name="hdnflag" type="hidden" value="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <script type="text/javascript">
+                function validNameForRegistration(e) {
+                    var t; var n; var r;
+                    if (e.which) { t = e.which }
+                    n = String.fromCharCode(t);
+                    if (n == "'" || n == "." || n.toLowerCase() == "a" || n.toLowerCase() == "b" || n.toLowerCase() == "c" || n.toLowerCase() == "d" || n.toLowerCase() == "e" || n.toLowerCase() == "f" || n.toLowerCase() == "g" || n.toLowerCase() == "h" || n.toLowerCase() == "i" || n.toLowerCase() == "j" || n.toLowerCase() == "k" || n.toLowerCase() == "l"
+                        || n.toLowerCase() == "m" || n.toLowerCase() == "n" || n.toLowerCase() == "o" || n.toLowerCase() == "p" || n.toLowerCase() == "q" || n.toLowerCase() == "r" || n.toLowerCase() == "s" || n.toLowerCase() == "t" || n.toLowerCase() == "u" || n.toLowerCase() == "v" || n.toLowerCase() == "w" || n.toLowerCase() == "x" || n.toLowerCase() == "y"
+                        || n.toLowerCase() == "z" || n.toLowerCase() == " ") {
+                        return true
+                    }
+                    else {
+                        return false;
+                    }
+                }
+        
+                function validateIdNumber(event) {
+                    //////debugger;
+                    if (event.charCode == 39) {
+                        return false;
+                    }
+                    return (event.charCode == 8 || event.charCode == 9 || event.charCode == 45 || event.charCode == 47 ||
+                        (event.charCode >= 39 && event.charCode <= 46 && event.charCode == 39) || (event.charCode >= 48 && event.charCode <= 57) ||
+                        (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 65 && event.charCode <= 90))
+                }
+                function validateRollNumber(event) {
+                    //////debugger;
+                    if (event.charCode == 39 || event.charCode == 46) {
+                        return false;
+                    }
+                    else if (event.charCode == 47) {
+                        return true;
+                    }
+                    return (event.charCode == 8 || event.charCode == 9 || event.charCode == 32 || event.charCode == 39 || event.charCode == 45 || event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 65 && event.charCode <= 90))
+                }
+            </script>
+        </form>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+            </section>
+        
+            <div class="modal fade in sucMsgPopReg" id="sucMsgPopReg" role="dialog">
+                <div class="modal-dialog">
+        
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-body ">
+                            <a class="btncloseRegFrom"><i class="fa fa-times"></i></a>
+                            <p class="sucMsgtxtReg" id="sucMsgPopRegText"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary btncloseRegFrom" data-dismiss="modal" id="btnclose"> Close</button>
+                        </div>
+                    </div>
+        
+                </div>
+            </div>
+        
+         <div class="{% if original %}modal fade in sucMsgPopRHQ{% else %}hidden{% endif %}" id="confirmMobile" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content" style="width:480px;">
+                        <div class="modal-body ">
+                            <p> Please confirm your Email ID before submitting the Form. </p>
+                            <p> OTP will be sent on your Email ID before final submission. </p>
+                        </div>
+                        <form method="post" action="{% url 'match_otp' %}">
+                                {% csrf_token %}
+        
+                            <div class="form-group" style="margin-left:25%">
+                                    <label class="col-sm-5" id="oldPassword" style="margin-left:4%">Enter OTP </label><br>
+                                    <div class="col-sm-7 forfieldPlace nopadding">
+                                        <div class="formfieldCnt">
+                                            <input class="form-control" id="otp" name="otp" onkeypress type="text" value="" style="width:100%"/>
+                                            <input class="form-control" id="username_otp" name="username_otp" onkeypress type="hidden" value="{{new_store.user_name}}" style="width:100%"/>
+                                            <label class="error-message" id="oldPassword1"></label>
+                                        </div>
+                                    </div>
+                            </div>
+                            </center>
+        
+                        <div class="modal-footer">
+                            <div class="sbmitandcancelBtns">
+                                <label class="col-sm-5" id="lblConfrmMobile"></label>
+                                <label class="col-sm-5" id="lblConfrmMail"></label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="sbmitandcancelBtns">
+                                <button type="submit" class="btn btn-rhqDelete" data-dismiss="modal" id="btnconfrmMobile"> Confirm</button>
+                                <button type="button" onclick="window.location.reload();" class="btn btn-primary" data-dismiss="modal" id="btncancelMobile"> Resend</button>
+                                <a href="/"><button type="button" class="btn btn-warning btncloseno" data-dismiss="modal" id="btncancelMobile"> Cancel</button></a>
+                                
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            $("#rbAadharYes").click(function () {
+                $("#AadharNumber").prop('disabled','');
+                $("#VerifyAadharNumber").prop('disabled','');
+            });
+
+            $("#rbAadharNo").click(function () {
+                $("#AadharNumber").prop('disabled','disabled');
+                $("#VerifyAadharNumber").prop('disabled','disabled');
+                $("#AadharNumber").val('');
+                $("#VerifyAadharNumber").val('');
+            });
+
+            $("#ChangedName1").click(function () {
+                    $("#NewName").prop('disabled', '');  
+            });
+            $("#ChangedName2").click(function () {
+                    $("#NewName").prop('disabled','disabled');
+                    $("#NewName").val('');
+            });
+        
+            $("#VerifyAadharNumber").change(function () {
+                if($("#VerifyAadharNumber").val() != $("#AadharNumber").val()){
+                    $("#AadharNumber2").text('Aadhar is not matching');
+                    $("#VerifyAadharNumber").val('');
+                }else{
+                    $("#AadharNumber2").text('');
+                }
+            });
+        
+            $("#AadharNumber").change(function () {
+                if($("#VerifyAadharNumber").val() != $("#AadharNumber").val()){
+                    $("#AadharNumber2").text('Aadhar is not matching');
+                    $("#VerifyAadharNumber").val('');
+                }else{
+                    $("#AadharNumber2").text('');
+                }
+            });
+        
+            $("#VerifyName").change(function () {
+                if($("#Name").val() != $("#VerifyName").val()){
+                   $("#VerifyName1").text('Name is not varifying');
+                    $("#VerifyName").val('');
+                }else{
+                    $("#VerifyName1").text('');
+                }
+            });
+        
+            $("#Name").change(function () {
+                if($("#Name").val() != $("#VerifyName").val()){
+                   $("#VerifyName1").text('Name is not varifying');
+                    $("#VerifyName").val('');
+                }else{
+                    $("#VerifyName1").text('');
+                }
+            });
+        
+            $("#VerifyDateOfBirth").change(function () {
+                if($("#VerifyDateOfBirth").val() != $("#DateOfBirth").val()){
+                    $("#VerifyDateOfBirth1").text('Birth is not varifying');
+                    $("#VerifyDateOfBirth").val('');
+                }else{
+                    $("#VerifyDateOfBirth1").text('');
+                }
+            });
+        
+            $("#DateOfBirth").change(function () {
+                if($("#VerifyDateOfBirth").val() != $("#DateOfBirth").val()){
+                    $("#VerifyDateOfBirth1").text('Birth is not varifying');
+                    $("#VerifyDateOfBirth").val('');
+                }else{
+                    $("#VerifyDateOfBirth1").text('');
+                }
+            });
+        
+            $("#VerifyMotherName").change(function () {
+                if($("#VerifyMotherName").val() != $("#MotherName").val()){
+                    $("#VerifyMotherName1").text('MotherName is not varifying');
+                    $("#VerifyMotherName").val('');
+                }else{
+                    $("#VerifyMotherName1").text('');
+                }
+            });
+        
+            $("#MotherName").change(function () {
+                if($("#VerifyMotherName").val() != $("#MotherName").val()){
+                    $("#VerifyMotherName1").text('MotherName is not varifying');
+                    $("#VerifyMotherName").val('');
+                }else{
+                    $("#VerifyMotherName1").text('');
+                }
+            });
+        
+            $("#VerifyFatherName").change(function () {
+        
+                if($("#VerifyFatherName").val() != $("#FatherName").val()){
+                    $("#VerifyFatherName1").text('FatherName is not varifying');
+                    $("#VerifyFatherName").val('');
+                }else{
+                    $("#VerifyFatherName1").text('');
+                }
+            });
+        
+            $("#FatherName").change(function () {
+        
+                if($("#VerifyFatherName").val() != $("#FatherName").val()){
+                    $("#VerifyFatherName1").text('FatherName is not varifying');
+                    $("#VerifyFatherName").val('');
+                }else{
+                    $("#VerifyFatherName1").text('');
+                }
+            });
+        
+            $("#VerifyEmailID").change(function () {
+        
+                if($("#VerifyEmailID").val() != $("#EmailID").val()){
+                    $("#VerifyEmailID1").text('EmailID is not varifying');
+                    $("#VerifyEmailID").val('');
+                }else{
+                    $("#VerifyEmailID1").text('');
+                }
+            });
+        
+            $("#EmailID").change(function () {
+        
+                if($("#VerifyEmailID").val() != $("#EmailID").val()){
+                    $("#VerifyEmailID1").text('EmailID is not varifying');
+                    $("#VerifyEmailID").val('');
+                }else{
+                    $("#VerifyEmailID1").text('');
+                }
+            });
+        
+            $("#VerifyMobileNum").change(function () {
+                if($("#VerifyMobileNum").val() != $("#MobileNum").val()){
+                    $("#VerifyMobileNum1").text('MobileNumber is not varifying');
+                    $("#VerifyMobileNum").val('');
+                }else{
+                    $("#VerifyMobileNum1").text('');
+                }
+            });
+        
+            $("#MobileNum").change(function () {
+                if($("#VerifyMobileNum").val() != $("#MobileNum").val()){
+                    $("#VerifyMobileNum1").text('MobileNumber is not varifying');
+                    $("#VerifyMobileNum").val('');
+                }else{
+                    $("#VerifyMobileNum1").text('');
+                }
+            });
+        
+            $("#ddlYearofpassing").change(function () {
+        
+                if($("#ddlYearofpassing").val() != $("#Yearofpassing").val()){
+                    $("#ddlYearofpassing1").text('Yearofpassing is not varifying');
+                    $("#ddlYearofpassing").val('');
+                }else{
+                    $("#ddlYearofpassing1").text('');
+                }
+            });
+        
+             $("#Yearofpassing").change(function () {
+        
+                if($("#ddlYearofpassing").val() != $("#Yearofpassing").val()){
+                    $("#ddlYearofpassing1").text('Yearofpassing is not varifying');
+                    $("#ddlYearofpassing").val('');
+                }else{
+                    $("#ddlYearofpassing1").text('');
+                }
+            });
+        
+            $("#VerifySecondaryRollNum").change(function () {
+                if($("#VerifySecondaryRollNum").val() != $("#SecondaryRollNum").val()){
+                    $("#VerifySecondaryRollNum1").text('SecondaryRollNum is not varifying');
+                    $("#VerifySecondaryRollNum").val('');
+                }else{
+                   $("#VerifySecondaryRollNum1").text('');
+                }
+            });
+        
+            $("#SecondaryRollNum").change(function () {
+                if($("#VerifySecondaryRollNum").val() != $("#SecondaryRollNum").val()){
+                    $("#VerifySecondaryRollNum1").text('SecondaryRollNum is not varifying');
+                    $("#VerifySecondaryRollNum").val('');
+                }else{
+                   $("#VerifySecondaryRollNum1").text('');
+                }
+            });
+        
+            $("#ddlEducationBoard").change(function () {
+        
+                if($("#ddlEducationBoard").val() != $("#EducationBoard").val()){
+                    $("#ddlEducationBoard1").text('EducationBoard is not varifying');
+                    $("#ddlEducationBoard").val('');
+                }else{
+                    $("#ddlEducationBoard1").text('');
+                }
+            });
+        
+            $("#EducationBoard").change(function () {
+        
+                if($("#ddlEducationBoard").val() != $("#EducationBoard").val()){
+                    $("#ddlEducationBoard1").text('EducationBoard is not varifying');
+                    $("#ddlEducationBoard").val('');
+                }else{
+                    $("#ddlEducationBoard1").text('');
+                }
+            });
+        
+        
+        
+        </script>
+        <script>
+          const pasteBox = document.getElementByClassName("no-paste");
+          pasteBox.onpaste = e => {
+            e.preventDefault();
+            return false;
+          };
+        </script>
+        
+        <script>
+            {% for i in messages %}
+            alert('{{i}}');
+            {% endfor %}
+        </script>
+  {% endblock %}
