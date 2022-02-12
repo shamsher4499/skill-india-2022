@@ -963,10 +963,10 @@
                     <form method="post" action="{% url 'change_password' %}">
                         {% csrf_token %}
                     <div class="form-group">
-                            <label class="col-sm-5" id="oldPassword">Old Password</label>
+                            <label class="col-sm-5" id="oldPassword">OTP</label>
                             <div class="col-sm-7 forfieldPlace nopadding">
                                 <div class="formfieldCnt">
-                                    <input class="form-control" id="old_password" name="old_password" onkeypress type="password" value="" />
+                                    <input class="form-control" id="old_password" name="old_password" onkeypress type="password" value=""  required/>
                                     <label class="error-message" id="oldPassword1"></label>
                                     <input class="form-control" id="username" name="username" onkeypress type="hidden" value="{{u}}" />
                                 </div>
@@ -976,7 +976,7 @@
                             <label class="col-sm-5" id="newPassword">New Password</label>
                             <div class="col-sm-7 forfieldPlace nopadding">
                                 <div class="formfieldCnt">
-                                    <input class="form-control" id="new_password" maxlength="12" name="new_password" type="password" value="" />
+                                    <input class="form-control" id="new_password" maxlength="12" name="new_password" type="password" value=""  required/>
 
                                     <label class="error-message" id="newPassword1"></label>
                                 </div>
@@ -986,12 +986,15 @@
                             <label class="col-sm-5" id="confirmPassword">Confirm Password</label>
                             <div class="col-sm-7 forfieldPlace nopadding">
                                 <div class="formfieldCnt">
-                                    <input class="form-control" id="confirm_password" maxlength="12" name="confirm_password" type="password" value=""/>
+                                    <input class="form-control" id="confirm_password" maxlength="12" name="confirm_password" type="password" value="" required/>
 
                                     <label class="error-message" id="confirmPassword1"></label>
                                 </div>
                             </div>
+                        
+                       
                         </div>
+                        <p style="color: #036800;">OTP sent on entered email address.</p>
                 </div>
                 <div class="modal-footer">
                     <div class="sbmitandcancelBtns">

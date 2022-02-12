@@ -16,6 +16,8 @@ class Notifications(models.Model):
     not_pdf = models.FileField(upload_to='media', null=True)
 
     def get_size(self):
+        # icon_path = self.not_icon
+        # print(icon_path)
         pdf_path = self.not_pdf
         file_size = os.path.getsize(str(settings.MEDIA_ROOT)+'/'+str(pdf_path))
         formatted_float = "{:.2f}".format(file_size/1024)

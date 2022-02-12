@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['https://www.edu-nsdcindia.org/', 'www.edu-nsdcindia.org']
+ALLOWED_HOSTS = ['https://www.edu-nsdcindia.org/', 'www.edu-nsdcindia.org', '*']
 
 
 # Application definition
@@ -74,22 +74,22 @@ WSGI_APPLICATION = 'skill_india.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'skill-india-2022',
-        'USER': 'skillindia',
-        'PASSWORD': '@Eduskill2022',
-        'HOST': 'skillindia.mysql.pythonanywhere-services.com'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'skill-india-2022',
+#         'USER': 'skillindia',
+#         'PASSWORD': '@Eduskill2022',
+#         'HOST': 'skillindia.mysql.pythonanywhere-services.com'
+#     }
+# }
 
 
 # Password validation
